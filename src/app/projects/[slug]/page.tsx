@@ -5,7 +5,6 @@ import {
   ArrowLeft,
   BookOpen,
   CalendarDays,
-  CheckCircle2,
   ExternalLink,
   GitBranch,
   Layers3,
@@ -56,6 +55,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   const isHealthCatcherWeb = project.slug === "healthcatcher-web";
   const isHealthHola = project.slug === "healthhola";
   const statusLabel = project.status === "archived" ? "사업 정리" : "완료";
+  const stackReasons = getStackReasons(project.slug);
   const postTitle = (() => {
     if (isWeatherProject) return `${project.title}: 첫 Android 프로젝트를 다시 읽기`;
     if (isCrmProject) return `${project.title}: 동적 거래 속성을 가진 CRM 플랫폼 만들기`;
@@ -133,7 +133,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       </header>
 
       <div className="mx-auto grid max-w-6xl gap-8 px-5 py-8 lg:grid-cols-[minmax(0,1fr)_280px]">
-        <article className="min-w-0 rounded-[8px] border border-white/[0.08] bg-white/[0.02]">
+        <article className="min-w-0">
           <div className="border-b border-white/[0.06] px-6 py-8 sm:px-9 sm:py-10">
             <div className="mb-5 flex flex-wrap gap-3 text-[13px] text-[#8a8f98]">
               <span className="inline-flex items-center gap-2">
@@ -160,23 +160,20 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           <div className="space-y-12 px-6 py-8 sm:px-9 sm:py-10">
             <PostSection id="overview" title="프로젝트 소개">
               <p>{overviewText}</p>
-              <div className="mt-6 grid gap-3 sm:grid-cols-3">
+              <dl className="mt-6 grid gap-5 border-y border-white/[0.06] py-5 sm:grid-cols-3">
                 {[
                   ["역할", project.role],
                   ["형태", project.team],
                   ["상태", statusLabel],
                 ].map(([label, value]) => (
-                  <div
-                    key={label}
-                    className="rounded-[8px] border border-white/[0.08] bg-[#0f1011] p-4"
-                  >
-                    <p className="text-[13px] text-[#62666d]">{label}</p>
-                    <p className="mt-2 text-[14px] leading-6 text-[#d0d6e0]">
+                  <div key={label}>
+                    <dt className="text-[13px] text-[#62666d]">{label}</dt>
+                    <dd className="mt-2 text-[14px] leading-6 text-[#d0d6e0]">
                       {value}
-                    </p>
+                    </dd>
                   </div>
                 ))}
-              </div>
+              </dl>
             </PostSection>
 
             {isWeatherProject || isCrmProject ? (
@@ -236,49 +233,44 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             ) : null}
 
             <PostSection id="features" title="구현한 기능">
-              <div className="grid gap-3">
+              <ul className="list-disc space-y-2 pl-5">
                 {project.features.map((feature) => (
-                  <div key={feature} className="flex gap-3 rounded-[8px] bg-[#0f1011] p-4">
-                    <CheckCircle2 className="mt-1 size-4 shrink-0 text-[#10b981]" />
-                    <p>{feature}</p>
-                  </div>
+                  <li key={feature}>{feature}</li>
                 ))}
-              </div>
+              </ul>
             </PostSection>
 
             <PostSection id="stack" title="사용 기술">
               <p>{stackText}</p>
-              <div className="mt-5 flex flex-wrap gap-2">
+              <div className="mt-6 space-y-5">
                 {project.stacks.map((stack) => (
-                  <span
-                    key={stack}
-                    className="rounded-full border border-[#23252a] px-3 py-1 text-[12px] font-medium text-[#d0d6e0]"
-                  >
-                    {stack}
-                  </span>
+                  <div key={stack}>
+                    <h3 className="text-[17px] font-medium leading-[1.5] text-[#f7f8f8]">
+                      {stack}
+                    </h3>
+                    <p className="mt-1 text-[15px] leading-[1.75] text-[#8a8f98]">
+                      {stackReasons[stack] ?? "프로젝트 요구사항과 기존 구조에 맞춰 사용했습니다."}
+                    </p>
+                  </div>
                 ))}
               </div>
             </PostSection>
 
             <PostSection id="structure" title="구조와 개선">
               <p>{structureText}</p>
-              <div className="mt-5 space-y-3">
+              <ul className="mt-5 list-disc space-y-2 pl-5">
                 {project.architecture.map((item) => (
-                  <p key={item} className="rounded-[8px] border border-white/[0.08] bg-[#0f1011] p-4">
-                    {item}
-                  </p>
+                  <li key={item}>{item}</li>
                 ))}
-              </div>
+              </ul>
             </PostSection>
 
             <PostSection id="retrospective" title="배운 점">
-              <div className="grid gap-3">
+              <ul className="list-disc space-y-2 pl-5">
                 {project.learnings.map((learning) => (
-                  <p key={learning} className="rounded-[8px] bg-[#0f1011] p-4">
-                    {learning}
-                  </p>
+                  <li key={learning}>{learning}</li>
                 ))}
-              </div>
+              </ul>
             </PostSection>
           </div>
         </article>
@@ -356,4 +348,57 @@ function PostSection({
       {children}
     </section>
   );
+}
+
+function getStackReasons(slug: string): Record<string, string> {
+  const reasons: Record<string, Record<string, string>> = {
+    healthhola: {
+      Expo: "빠르게 앱을 빌드하고 Android/iOS 개발 환경을 맞추기 위해 선택했습니다.",
+      "React Native": "하나의 코드베이스로 모바일 앱 화면을 구현하면서 네이티브 앱 경험을 만들 수 있어 사용했습니다.",
+      "Expo Router": "파일 기반 라우팅으로 홈, 체험단, 커뮤니티, 마이페이지 같은 화면 흐름을 관리하기 위해 사용했습니다.",
+      "Redux Toolkit": "인증, 유저, 체험단, 커뮤니티, 설문, 쿠폰처럼 상태 도메인이 많아 slice 단위로 나누기 위해 사용했습니다.",
+      Axios: "백엔드 API 호출과 토큰 주입, 재발급 인터셉터를 공통화하기 위해 사용했습니다.",
+      "Spring Boot": "모바일 앱에서 필요한 REST API를 빠르게 구성하고 도메인별 서비스 계층을 만들기 위해 선택했습니다.",
+      "Spring Security": "로그인 이후 인증이 필요한 API와 공개 조회 API를 명확히 나누기 위해 사용했습니다.",
+      JWT: "모바일 앱에서 stateless 인증 흐름을 만들고 access/refresh token 재발급을 처리하기 위해 사용했습니다.",
+      OAuth2: "소셜 로그인 확장을 고려해 Google, Kakao, Naver 응답을 처리할 수 있는 구조로 도입했습니다.",
+      PostgreSQL: "운영 데이터를 관계형 모델로 안정적으로 저장하기 위해 사용했습니다.",
+      Redis: "refresh token과 인증 보조 데이터를 빠르게 조회하고 관리하기 위해 사용했습니다.",
+      "AWS S3": "커뮤니티 게시글 이미지 같은 파일 업로드를 서버 파일시스템에 묶지 않기 위해 사용했습니다.",
+    },
+    "healthcatcher-web": {
+      "Vue 3": "작은 팀에서 브랜드 홈페이지를 빠르게 구성하고 섹션 컴포넌트를 단순하게 관리하기 위해 선택했습니다.",
+      Vite: "정적 홈페이지 개발 서버와 빌드 속도가 빨라 랜딩 페이지 작업에 적합했습니다.",
+      "Vue Router": "소개, 사업, 커뮤니티, 문의, 정책 페이지를 명확한 라우트로 나누기 위해 사용했습니다.",
+      Pinia: "Vue 생태계의 가벼운 상태 관리 도구로, 공지 모달이나 전역 상태 확장 가능성을 남기기 위해 포함했습니다.",
+      "Tailwind CSS": "반응형 패딩, 타이포그래피, 섹션 레이아웃을 빠르게 조정하기 위해 사용했습니다.",
+      PostCSS: "Tailwind 빌드 파이프라인을 구성하기 위한 기본 CSS 처리 도구로 사용했습니다.",
+      Vercel: "정적 사이트를 빠르게 배포하고 외부에 공유하기 위해 선택했습니다.",
+    },
+    "weather-app-android": {
+      Android: "첫 모바일 프로젝트로 실제 Android Activity, 권한, 리소스 구조를 경험하기 위해 사용했습니다.",
+      Java: "당시 Android 수업/프로젝트 환경에 맞춰 기본 언어로 사용했습니다.",
+      Retrofit2: "OpenWeatherMap의 여러 REST API를 인터페이스 단위로 분리해 호출하기 위해 선택했습니다.",
+      Gson: "날씨, 예보, 대기질 응답 JSON을 Java 모델로 매핑하기 위해 사용했습니다.",
+      "OpenWeatherMap API": "현재 날씨, 예보, 대기질 데이터를 한 서비스에서 받아올 수 있어 선택했습니다.",
+      Glide: "날씨 아이콘과 이미지 리소스를 화면에 안정적으로 표시하기 위해 사용했습니다.",
+      WeatherView: "비, 눈 같은 날씨 효과를 Android 화면에서 시각적으로 표현하기 위해 사용했습니다.",
+      "Material Components": "탭과 버튼 등 기본 UI 요소를 Android 스타일에 맞춰 구성하기 위해 사용했습니다.",
+    },
+    "crm-platform": {
+      "Spring Boot": "인증, 워크스페이스, 회사, 거래 API를 계층적으로 구성하기 위해 선택했습니다.",
+      "Next.js": "CRM 프론트엔드를 라우팅과 컴포넌트 단위로 구성하고 백엔드 API와 연결하기 위해 사용했습니다.",
+      React: "거래 그리드와 속성 편집 UI처럼 상태 변화가 많은 화면을 컴포넌트로 관리하기 위해 사용했습니다.",
+      MySQL: "워크스페이스, 회사, 거래, 동적 속성 데이터를 관계형 구조로 저장하기 위해 사용했습니다.",
+      "Spring Security": "로그인 이후 워크스페이스별 접근 권한을 검증하기 위해 사용했습니다.",
+      JWT: "프론트엔드와 백엔드가 분리된 환경에서 인증 상태를 전달하기 위해 사용했습니다.",
+      JPA: "도메인 엔티티와 Repository 기반 데이터 접근을 빠르게 구성하기 위해 사용했습니다.",
+      "AG Grid": "거래 목록을 스프레드시트처럼 편집하고 동적 컬럼을 표현하기 위해 선택했습니다.",
+      "Ant Design": "CRM 화면의 사이드바, 폼, 버튼 등 관리 도구 UI를 빠르게 구성하기 위해 사용했습니다.",
+      Docker: "로컬과 배포 환경 차이를 줄이고 서버 실행 환경을 묶기 위해 실험했습니다.",
+      "GitHub Actions": "빌드와 배포 과정을 자동화하며 운영 환경 연결 문제를 다루기 위해 사용했습니다.",
+    },
+  };
+
+  return reasons[slug] ?? {};
 }

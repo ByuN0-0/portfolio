@@ -162,6 +162,7 @@ export default function Home() {
                       alt={`${project.title} preview`}
                       width={720}
                       height={1280}
+                      priority={index === 0}
                       className={
                         project.slug === "healthcatcher-web"
                           ? "h-auto w-full object-contain opacity-90"
