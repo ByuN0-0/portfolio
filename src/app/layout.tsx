@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "ByuN0-0 Portfolio",
-  description: "Git 기록으로 정리하는 개발 프로젝트 포트폴리오",
+  description: "서비스 개발과 운영 경험을 담은 개발 프로젝트 포트폴리오",
 };
 
 export default function RootLayout({

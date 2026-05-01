@@ -17,59 +17,38 @@ const homeProjects = [...projects].sort((a, b) => {
   const latestB = b.milestones.at(-1)?.date ?? "0000-00-00";
   return latestB.localeCompare(latestA);
 });
-const weatherProject = projects.find((project) => project.slug === "weather-app-android") ?? projects[0];
 const githubProfileUrl = "https://github.com/ByuN0-0";
 const profileAvatarUrl = "/profile/avatar.webp";
 
-const categories = [
-  ["Business", 2],
-  ["Mobile App", 1],
-  ["Vue", 1],
-  ["Android", 1],
-  ["CRM", 1],
-  ["Prototype", 2],
-  ["API Integration", 2],
-  ["Retrospective", 4],
+const categories: [string, number][] = [
+  ["회사 프로젝트", projects.filter((project) => project.category === "company").length],
+  ["사업 프로젝트", projects.filter((project) => project.category === "business").length],
+  ["개인 프로젝트", projects.filter((project) => project.category === "personal").length],
+  ["Prototype", projects.filter((project) => ["weather-app-android", "crm-platform"].includes(project.slug)).length],
+  ["Retrospective", projects.length],
 ];
 
-const recentPosts = [
-  {
-    title: "HealthHola: 사업 프로젝트에서 앱과 백엔드를 함께 만들기",
-    href: "/projects/healthhola",
-    date: "2025.02.17",
-  },
-  {
-    title: "HealthCatcher Web: 브랜드 홈페이지와 사업 소개 채널 만들기",
-    href: "/projects/healthcatcher-web",
-    date: "2025.01.14",
-  },
-  {
-    title: "CRM Platform: 동적 거래 속성을 가진 CRM 플랫폼 만들기",
-    href: "/projects/crm-platform",
-    date: "2024.06.17",
-  },
-  {
-    title: "WeatherApp: 첫 Android 프로젝트를 포트폴리오 글로 정리하기",
-    href: `/projects/${weatherProject.slug}`,
-    date: "2023.06.10",
-  },
-  {
-    title: "OpenWeatherMap API로 현재 날씨와 예보 데이터 연결하기",
-    href: `/projects/${weatherProject.slug}#prototype`,
-    date: "2023.05.30",
-  },
-  {
-    title: "MainActivity에서 데이터 로더와 View 초기화 클래스로 분리하기",
-    href: `/projects/${weatherProject.slug}#structure`,
-    date: "2023.06.05",
-  },
-];
+const recentPosts = homeProjects.slice(0, 6).map((project) => ({
+  title: projectPostTitle(project.slug, project.title),
+  href: `/projects/${project.slug}`,
+  date: project.milestones.at(-1)?.date.replaceAll("-", ".") ?? project.period,
+}));
+
+const categoryLabel = {
+  company: "회사 프로젝트",
+  business: "사업 프로젝트",
+  personal: "개인 프로젝트",
+} as const;
 
 function projectPostTitle(slug: string, title: string) {
   if (slug === "weather-app-android") return `${title}: GPS 기반 Android 날씨 앱`;
   if (slug === "crm-platform") return `${title}: 동적 거래 속성을 가진 CRM 플랫폼`;
   if (slug === "healthhola") return `${title}: 건강 체험단 모바일 앱과 백엔드`;
   if (slug === "healthcatcher-web") return `${title}: 헬스캐처 공식 홈페이지`;
+  if (slug === "blynx-insight-platform") return `${title}: 예측 플랫폼 운영 시스템`;
+  if (slug === "moonshot") return `${title}: LLM 챗봇 서비스 운영`;
+  if (slug === "rizzz") return `${title}: AI 소셜 플랫폼 운영 개선`;
+  if (slug === "blynx-company-web") return `${title}: 회사 홈페이지와 브랜드 웹`;
   return title;
 }
 
@@ -84,7 +63,7 @@ export default function Home() {
                 ByuN0-0.log
               </Link>
               <p className="mt-3 text-[15px] leading-[1.6] tracking-[-0.165px] text-[#8a8f98]">
-                Git 기록, 프로토타입, 회고를 글처럼 쌓아두는 개발 포트폴리오
+                서비스 운영과 제품 구현 경험을 글처럼 쌓아두는 개발 포트폴리오
               </p>
             </div>
             <nav className="flex gap-5 text-[14px] font-medium text-[#d0d6e0]">
@@ -119,7 +98,7 @@ export default function Home() {
                   <div className="mb-4 flex flex-wrap items-center gap-3 text-[13px] text-[#8a8f98]">
                     <span className="inline-flex items-center gap-2">
                       <FolderOpen className="size-4 text-[#7170ff]" />
-                      {index === 0 ? "최신 프로젝트" : "이전 프로젝트"}
+                      {categoryLabel[project.category]}
                     </span>
                     <span className="inline-flex items-center gap-2">
                       <CalendarDays className="size-4" />
@@ -216,8 +195,8 @@ export default function Home() {
               </div>
             </div>
             <p className="mt-5 text-[14px] leading-[1.7] text-[#d0d6e0]">
-              프로젝트를 결과물만 나열하지 않고, 기능을 만든 순서와 기술 선택의
-              이유가 보이도록 정리합니다.
+              백엔드, 프론트엔드, 인프라를 오가며 실제 서비스에 필요한 기능을
+              끝까지 연결해 온 개발자입니다.
             </p>
           </section>
 
@@ -239,12 +218,12 @@ export default function Home() {
           <section className="rounded-[8px] border border-white/[0.08] bg-white/[0.02] p-5">
             <h2 className="mb-4 flex items-center gap-2 text-[15px] font-medium">
               <PenLine className="size-4 text-[#7170ff]" />
-              기록 방식
+              주요 경험
             </h2>
             <ul className="space-y-3 text-[14px] leading-[1.6] text-[#8a8f98]">
-              <li>커밋 로그를 마일스톤으로 정리</li>
-              <li>README와 코드 구조에서 기능 근거 추출</li>
-              <li>가능한 프로젝트는 프로토타입으로 재현</li>
+              <li>서비스 기능 설계와 API 구현</li>
+              <li>관리자 도구와 사용자 화면 개발</li>
+              <li>배포, 결제, 배치, 크롤링 운영 경험</li>
             </ul>
           </section>
 
