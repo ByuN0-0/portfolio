@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 
 import { projects } from "@/data/projects";
+import { getFeaturedStacks } from "@/data/stack-groups";
 
 function getLatestProjectDate(project: (typeof projects)[number]) {
   return project.milestones.reduce(
@@ -142,7 +143,7 @@ export default function Home() {
                     {projectHomeSummary(project.slug)}
                   </p>
                   <div className="mt-6 flex flex-wrap gap-2">
-                    {project.stacks.slice(0, 5).map((stack) => (
+                    {getFeaturedStacks(project.slug, project.stacks).map((stack) => (
                       <span
                         key={stack}
                         className="rounded-full border border-[#23252a] px-3 py-1 text-[12px] font-medium text-[#d0d6e0]"

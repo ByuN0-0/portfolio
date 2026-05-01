@@ -13,6 +13,7 @@ import {
 import { CrmPrototype } from "@/components/crm/crm-prototype";
 import { WeatherPhone } from "@/components/weather/weather-phone";
 import { getProjectBySlug, projects } from "@/data/projects";
+import { getStackSections } from "@/data/stack-groups";
 
 type ProjectPageProps = {
   params: Promise<{
@@ -62,6 +63,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     personal: "개인 프로젝트",
   }[project.category];
   const stackReasons = getStackReasons(project.slug);
+  const stackSections = getStackSections(project.slug, project.stacks);
   const postTitle = (() => {
     if (isWeatherProject) return `${project.title}: 첫 Android 프로젝트를 다시 읽기`;
     if (isCrmProject) return `${project.title}: 동적 거래 속성을 가진 CRM 플랫폼 만들기`;
@@ -273,16 +275,35 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
             <PostSection id="stack" title="사용 기술">
               <p>{stackText}</p>
-              <div className="mt-6 space-y-5">
-                {project.stacks.map((stack) => (
-                  <div key={stack}>
-                    <h3 className="text-[17px] font-medium leading-[1.5] text-[#f7f8f8]">
-                      {stack}
+              <div className="mt-7 space-y-9">
+                {stackSections.map((section) => (
+                  <section key={section.label}>
+                    <h3 className="mb-4 text-[19px] font-medium leading-[1.5] text-[#f7f8f8]">
+                      {section.label}
                     </h3>
-                    <p className="mt-1 text-[15px] leading-[1.75] text-[#8a8f98]">
-                      {stackReasons[stack] ?? "프로젝트 요구사항과 기존 구조에 맞춰 사용했습니다."}
-                    </p>
-                  </div>
+                    <div className="space-y-6">
+                      {section.groups.map((group) => (
+                        <div key={`${section.label}-${group.label}`}>
+                          <p className="mb-3 text-[13px] font-medium uppercase tracking-[0.08em] text-[#7170ff]">
+                            {group.label}
+                          </p>
+                          <div className="space-y-4">
+                            {group.stacks.map((stack) => (
+                              <div key={stack}>
+                                <p className="text-[16px] font-medium leading-[1.5] text-[#f7f8f8]">
+                                  {stack}
+                                </p>
+                                <p className="mt-1 text-[15px] leading-[1.75] text-[#8a8f98]">
+                                  {stackReasons[stack] ??
+                                    "프로젝트 요구사항과 기존 구조에 맞춰 사용했습니다."}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </section>
                 ))}
               </div>
             </PostSection>
@@ -296,7 +317,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               </ul>
             </PostSection>
 
-            <PostSection id="retrospective" title="배운 점">
+            <PostSection id="retrospective" title="성과와 회고">
               <ul className="list-disc space-y-2 pl-5">
                 {project.learnings.map((learning) => (
                   <li key={learning}>{learning}</li>
@@ -382,6 +403,15 @@ function PostSection({
 }
 
 function getStackReasons(slug: string): Record<string, string> {
+  const commonReasons: Record<string, string> = {
+    TypeScript: "프론트엔드와 Node.js 백엔드에서 타입 안정성을 확보하고 API 계약 변경을 추적하기 위해 사용했습니다.",
+    JavaScript: "Vue 기반 정적 홈페이지를 빠르게 구성하고 브라우저 환경에서 단순하게 운영하기 위해 사용했습니다.",
+    Java: "Spring Boot 기반 서버와 Android 앱 개발 환경에 맞춰 안정적인 객체지향 구조를 만들기 위해 사용했습니다.",
+    "Docker Build": "서비스별 실행 환경을 이미지로 고정하고 배포 과정에서 빌드 결과를 일관되게 유지하기 위해 사용했습니다.",
+    "ECS Deploy": "컨테이너 서비스를 AWS ECS에 배포하고 운영 환경 업데이트를 자동화하기 위해 사용했습니다.",
+    "ECS Blue-Green Deploy": "프론트엔드 운영 배포에서 새 버전 전환 위험을 줄이기 위해 blue-green 방식으로 구성했습니다.",
+    "EventBridge Scheduler": "크롤러와 배치성 작업을 정해진 시간에 실행하기 위해 AWS EventBridge 스케줄을 사용했습니다.",
+  };
   const reasons: Record<string, Record<string, string>> = {
     healthhola: {
       Expo: "빠르게 앱을 빌드하고 Android/iOS 개발 환경을 맞추기 위해 선택했습니다.",
@@ -473,5 +503,8 @@ function getStackReasons(slug: string): Record<string, string> {
     },
   };
 
-  return reasons[slug] ?? {};
+  return {
+    ...commonReasons,
+    ...(reasons[slug] ?? {}),
+  };
 }
