@@ -73,7 +73,7 @@ const seoul = {
 const panelClass = "bg-black/40";
 
 function androidIcon(icon?: string) {
-  return `/weather-app-assets/a${icon ?? "01d"}.png`;
+  return `/weather-app-assets/a${icon ?? "01d"}.webp`;
 }
 
 function formatClock(timestamp?: number | null, timezone = 32400) {
@@ -141,7 +141,7 @@ function getBackgroundIndex(data: WeatherPayload | null, timestamp: number) {
 }
 
 function backgroundImage(data: WeatherPayload | null, timestamp: number) {
-  return `/weather-app-assets/num${getBackgroundIndex(data, timestamp)}.jpg`;
+  return `/weather-app-assets/num${getBackgroundIndex(data, timestamp)}.webp`;
 }
 
 function windDirection(deg: number) {
@@ -223,7 +223,7 @@ export function WeatherPhone() {
               className="pointer-events-none absolute inset-0 z-0 bg-cover bg-center"
               style={
                 {
-                  backgroundImage: `url(/weather-app-assets/bgimg.png)`,
+                  backgroundImage: `url(/weather-app-assets/bgimg.webp)`,
                   maskImage:
                     "linear-gradient(to bottom, transparent 0%, transparent 42%, rgba(0,0,0,0.35) 55%, black 68%)",
                   WebkitMaskImage:
@@ -498,7 +498,7 @@ function WeatherEffect({
           <span className="absolute right-[-64px] top-[13%] h-px w-32 rotate-[-12deg] animate-[shooting-star_6s_linear_infinite] bg-linear-to-l from-white via-white/80 to-transparent" />
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/weather-app-assets/line.png"
+            src="/weather-app-assets/line.webp"
             alt=""
             className="absolute right-[-72px] top-[9%] size-16 animate-[shooting-star_6s_linear_infinite] object-contain opacity-90"
           />
