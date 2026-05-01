@@ -94,6 +94,7 @@ function projectPostTitle(slug: string, title: string) {
   if (slug === "crm-platform") return `${title}: 동적 거래 속성을 가진 CRM 플랫폼`;
   if (slug === "healthhola") return `${title}: 건강 체험단 모바일 앱과 백엔드`;
   if (slug === "healthcatcher-web") return `${title}: 헬스캐처 공식 홈페이지`;
+  if (slug === "manjeom") return `${title}: 웹 기반 점자 학습 서비스`;
   if (slug === "blynx-insight-platform") return `${title}: 야구 예측 플랫폼 운영 시스템`;
   if (slug === "moonshot") return `${title}: LLM 챗봇 서비스 운영`;
   if (slug === "rizzz") return `${title}: 종료 전 AI 소셜 플랫폼 품질 개선`;
@@ -112,6 +113,8 @@ function projectHomeSummary(slug: string) {
       "건강 체험단 모집과 커뮤니티를 연결하려던 모바일 앱. 설문, 포인트, 쿠폰, 신고와 차단까지 포함한 건강 서비스 운영 흐름.",
     "healthcatcher-web":
       "헬스캐처 사업을 소개하던 공식 홈페이지. 브랜드 소개, 사업 영역, 팀 소개, 제휴 문의와 정책 문서를 한 곳에 모은 웹사이트.",
+    manjeom:
+      "한글 점자, 숫자, 로마자, 수학 기호를 표와 문제로 익히는 점자 학습 웹서비스. 6점 입력, 선택형/입력형 연습, 점자 변환기를 함께 제공.",
     "crm-platform":
       "회사와 거래 정보를 워크스페이스 단위로 관리하는 웹 CRM. 거래 속성을 자유롭게 추가할 수 있는 동적 필드 구조가 핵심.",
     "weather-app-android":

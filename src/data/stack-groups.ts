@@ -170,6 +170,26 @@ const stackSectionsBySlug: Record<string, StackSection[]> = {
       groups: [{ label: "배포", stacks: ["Docker", "GitHub Actions"] }],
     },
   ],
+  manjeom: [
+    {
+      label: "프론트엔드",
+      groups: [
+        { label: "언어", stacks: ["TypeScript"] },
+        { label: "프레임워크/라이브러리", stacks: ["Next.js", "React", "Tailwind CSS"] },
+      ],
+    },
+    {
+      label: "변환 로직/데이터",
+      groups: [
+        { label: "언어/라이브러리", stacks: ["TypeScript", "hangul-js"] },
+        { label: "데이터", stacks: ["JSON Data"] },
+      ],
+    },
+    {
+      label: "인프라/CI/CD",
+      groups: [{ label: "배포", stacks: ["Vercel"] }],
+    },
+  ],
   "weather-app-android": [
     {
       label: "모바일 앱",

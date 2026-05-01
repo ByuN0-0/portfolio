@@ -55,6 +55,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   const isCrmProject = project.slug === "crm-platform";
   const isHealthCatcherWeb = project.slug === "healthcatcher-web";
   const isHealthHola = project.slug === "healthhola";
+  const isManjeom = project.slug === "manjeom";
   const statusLabel =
     project.status === "archived" ? "종료/보관" : project.status === "active" ? "진행/운영" : "완료";
   const categoryLabel = {
@@ -69,6 +70,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     if (isCrmProject) return `${project.title}: 동적 거래 속성을 가진 CRM 플랫폼 만들기`;
     if (isHealthHola) return `${project.title}: 사업 프로젝트에서 앱과 백엔드를 함께 만들기`;
     if (isHealthCatcherWeb) return `${project.title}: 헬스캐처 공식 홈페이지 만들기`;
+    if (isManjeom) return `${project.title}: 웹 기반 점자 학습 서비스 만들기`;
     return project.title;
   })();
   const overviewText = (() => {
@@ -83,6 +85,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     }
     if (isHealthCatcherWeb) {
       return `${project.subtitle} 사업 소개 채널로서 브랜드 첫 화면, 사업 영역, 팀 소개, 제휴 문의, 정책 문서까지 갖춘 공식 홈페이지입니다.`;
+    }
+    if (isManjeom) {
+      return `${project.subtitle} 점자표를 보는 데서 끝나지 않고 6점 입력, 선택형/입력형 연습, 점자 변환기를 연결해 실제로 익힐 수 있는 흐름을 만들었습니다.`;
     }
     return project.summary;
   })();
@@ -99,6 +104,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     if (isHealthCatcherWeb) {
       return "홈페이지는 Vue 3, Vite, Vue Router, Pinia, Tailwind CSS 기반으로 구성했고, Vercel 정적 배포에 맞춰 페이지와 섹션 컴포넌트를 나눴습니다.";
     }
+    if (isManjeom) {
+      return "Next.js App Router와 TypeScript로 화면을 구성하고, hangul-js와 JSON 점자 데이터를 조합해 한글 음절과 기호를 점자로 변환했습니다.";
+    }
     return "서비스 요구사항에 맞춰 사용한 기술과 선택 이유입니다.";
   })();
   const structureText = (() => {
@@ -113,6 +121,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     }
     if (isHealthCatcherWeb) {
       return "홈페이지는 페이지 라우트보다 섹션 컴포넌트가 핵심입니다. Home, About, Business, Community, Contact, Policy 페이지 안에서 브랜드 소개와 사업 콘텐츠를 재사용 가능한 섹션 단위로 나누었습니다.";
+    }
+    if (isManjeom) {
+      return "점자표, 연습 문제, 변환기가 같은 JSON 데이터를 기준으로 동작하도록 구성했습니다. 한글 변환은 `hangul-js`로 음절을 분해한 뒤 초성, 중성, 종성, 약자, 문장부호, 수학 기호 규칙을 순서대로 적용합니다.";
     }
     return project.architecture.join(" ");
   })();
@@ -240,6 +251,31 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               </section>
             ) : null}
 
+            {isManjeom ? (
+              <section id="visual" className="scroll-mt-20">
+                <div className="mb-5">
+                  <p className="text-[13px] font-medium uppercase text-[#7170ff]">
+                    Main Screen
+                  </p>
+                  <h2 className="mt-2 text-[28px] font-normal tracking-[-0.288px]">
+                    서비스 메인 화면
+                  </h2>
+                  <p className="mt-3 text-[16px] leading-[1.75] text-[#8a8f98]">
+                    배포된 만점 서비스의 첫 화면을 캡처해 학습 시작, 점자 변환기, 점자표 진입 흐름을 보여줍니다.
+                  </p>
+                </div>
+                <div className="overflow-hidden rounded-[8px] border border-white/[0.08] bg-[#0f1011]">
+                  <Image
+                    src={project.heroImage}
+                    alt={`${project.title} main screen`}
+                    width={1440}
+                    height={900}
+                    className="h-auto w-full object-contain"
+                  />
+                </div>
+              </section>
+            ) : null}
+
             {project.category === "company" ? (
               <section id="visual" className="scroll-mt-20">
                 <div className="mb-5">
@@ -341,7 +377,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             <nav className="space-y-3 text-[14px] text-[#d0d6e0]">
               {[
                 ["소개", "#overview"],
-                [isHealthCatcherWeb ? "메인 화면" : project.category === "company" ? "프로젝트 범위" : "프로토타입", isHealthCatcherWeb || project.category === "company" ? "#visual" : "#prototype"],
+                [isHealthCatcherWeb || isManjeom ? "메인 화면" : project.category === "company" ? "프로젝트 범위" : "프로토타입", isHealthCatcherWeb || isManjeom || project.category === "company" ? "#visual" : "#prototype"],
                 ["기능", "#features"],
                 ["기술", "#stack"],
                 ["구조", "#structure"],
@@ -407,6 +443,8 @@ function getStackReasons(slug: string): Record<string, string> {
     TypeScript: "프론트엔드와 Node.js 백엔드에서 타입 안정성을 확보하고 API 계약 변경을 추적하기 위해 사용했습니다.",
     JavaScript: "Vue 기반 정적 홈페이지를 빠르게 구성하고 브라우저 환경에서 단순하게 운영하기 위해 사용했습니다.",
     Java: "Spring Boot 기반 서버와 Android 앱 개발 환경에 맞춰 안정적인 객체지향 구조를 만들기 위해 사용했습니다.",
+    "JSON Data": "점자표, 문제, 변환기가 같은 원천 데이터를 보도록 표준 점자 데이터를 구조화하기 위해 사용했습니다.",
+    "hangul-js": "한글 음절을 초성, 중성, 종성으로 분해해 점자 변환 규칙을 적용하기 위해 사용했습니다.",
     "Docker Build": "서비스별 실행 환경을 이미지로 고정하고 배포 과정에서 빌드 결과를 일관되게 유지하기 위해 사용했습니다.",
     "ECS Deploy": "컨테이너 서비스를 AWS ECS에 배포하고 운영 환경 업데이트를 자동화하기 위해 사용했습니다.",
     "ECS Blue-Green Deploy": "프론트엔드 운영 배포에서 새 버전 전환 위험을 줄이기 위해 blue-green 방식으로 구성했습니다.",
@@ -458,6 +496,13 @@ function getStackReasons(slug: string): Record<string, string> {
       "Ant Design": "CRM 화면의 사이드바, 폼, 버튼 등 관리 도구 UI를 빠르게 구성하기 위해 사용했습니다.",
       Docker: "로컬과 배포 환경 차이를 줄이고 서버 실행 환경을 묶기 위해 실험했습니다.",
       "GitHub Actions": "빌드와 배포 과정을 자동화하며 운영 환경 연결 문제를 다루기 위해 사용했습니다.",
+    },
+    manjeom: {
+      TypeScript: "점자 데이터 타입과 변환 결과 형태를 명확히 잡아, 데이터 수정이 화면과 변환 로직에 미치는 영향을 추적하기 위해 사용했습니다.",
+      "Next.js": "점자표, 연습, 변환기, 관리자 화면을 App Router 기반 페이지로 나누고 실제 서비스로 배포하기 위해 사용했습니다.",
+      React: "6점 입력 패드, 퀴즈 화면, 변환 결과처럼 상태가 자주 바뀌는 UI를 컴포넌트로 구성하기 위해 사용했습니다.",
+      "Tailwind CSS": "학습 화면의 버튼, 카드, 점자표 레이아웃을 빠르게 만들고 반응형 간격을 조정하기 위해 사용했습니다.",
+      Vercel: "개인 도메인 manjeom.biyeon.net에 빠르게 배포하고 정적/동적 페이지를 함께 운영하기 위해 사용했습니다.",
     },
     "blynx-insight-platform": {
       NestJS: "예측, 사용자, 스토어, 라이브 운영 API처럼 요청/응답이 많은 서버 기능을 모듈 단위로 나누기 위해 사용했습니다.",
