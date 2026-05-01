@@ -182,6 +182,9 @@ export default async function Home({
               <a href={blogUrl} target="_blank" rel="noreferrer" className="rounded-full px-4 py-2 hover:bg-black hover:text-white">
                 블로그
               </a>
+              <Link href="/resume" className="rounded-full px-4 py-2 hover:bg-black hover:text-white">
+                이력서
+              </Link>
               <a
                 href={githubProfileUrl}
                 target="_blank"
@@ -424,31 +427,80 @@ export default async function Home({
                 ["Email", "devbyeon@gmail.com", emailUrl, Mail],
                 ["LinkedIn", "biyeon-hwang", linkedInUrl, UserRound],
                 ["Blog", "blog.biyeon.net", blogUrl, Rss],
-              ].map(([label, value, href, Icon]) => (
-                <a
-                  key={label as string}
-                  href={href as string}
-                  target={label === "Email" ? undefined : "_blank"}
-                  rel={label === "Email" ? undefined : "noreferrer"}
-                  className={`flex items-center justify-between rounded-full px-3 py-2 text-[14px] font-[480] transition ${
-                    label === "GitHub"
-                      ? "bg-black text-white hover:bg-[#2a2a2a]"
-                      : "hover:bg-black/[0.06]"
-                  }`}
-                >
-                  <span className="inline-flex min-w-0 items-center gap-2">
-                    <Icon className="size-4 shrink-0" />
-                    <span>{label as string}</span>
-                  </span>
-                  <span
-                    className={`truncate pl-3 ${
-                      label === "GitHub" ? "text-white" : "text-[#555]"
+              ].map(([label, value, href, Icon]) => {
+                const isExternal = (href as string).startsWith("http");
+                const isPrimary = label === "GitHub";
+
+                return (
+                  <a
+                    key={label as string}
+                    href={href as string}
+                    target={isExternal ? "_blank" : undefined}
+                    rel={isExternal ? "noreferrer" : undefined}
+                    className={`flex items-center justify-between rounded-full px-3 py-2 text-[14px] font-[480] transition ${
+                      isPrimary ? "bg-black text-white hover:bg-[#2a2a2a]" : "hover:bg-black/[0.06]"
                     }`}
                   >
-                    {value as string}
+                    <span className="inline-flex min-w-0 items-center gap-2">
+                      <Icon className="size-4 shrink-0" />
+                      <span>{label as string}</span>
+                    </span>
+                    <span className={`truncate pl-3 ${isPrimary ? "text-white" : "text-[#555]"}`}>
+                      {value as string}
+                    </span>
+                  </a>
+                );
+              })}
+            </div>
+          </section>
+
+          <section className="rounded-[24px] bg-[#f1f0eb] p-4">
+            <div className="mb-4 flex items-center justify-between gap-3">
+              <h2 className="text-[17px] font-[480]">이력 요약</h2>
+              <Link
+                href="/resume"
+                className="rounded-full bg-black px-3 py-1.5 text-[12px] font-[480] text-white hover:bg-[#2a2a2a]"
+              >
+                전체 보기
+              </Link>
+            </div>
+            <div className="space-y-4 text-[13px] font-[330] leading-[1.45] tracking-[-0.14px] text-[#333]">
+              <div>
+                <p className="font-mono text-[11px] uppercase tracking-[0.08em] text-[#555]">
+                  Career
+                </p>
+                <div className="mt-2 space-y-2">
+                  <p>
+                    <span className="block text-[#0a0a0a]">주식회사 블링스</span>
+                    <span>2025.03 - 현재 · 백엔드 개발자</span>
+                  </p>
+                  <p>
+                    <span className="block text-[#0a0a0a]">헬스캐처 법인</span>
+                    <span>2024.03 - 2025.02 · 개발자</span>
+                  </p>
+                </div>
+              </div>
+
+              <div className="border-t border-black/[0.08] pt-4">
+                <p className="font-mono text-[11px] uppercase tracking-[0.08em] text-[#555]">
+                  Education
+                </p>
+                <p className="mt-2">
+                  <span className="block text-[#0a0a0a]">
+                    삼육대학교 컴퓨터공학부 소프트웨어학과
                   </span>
-                </a>
-              ))}
+                  <span>2019.03 - 2025.02 · 평균 4.14 / 전공 4.38</span>
+                </p>
+              </div>
+
+              <div className="border-t border-black/[0.08] pt-4">
+                <p className="font-mono text-[11px] uppercase tracking-[0.08em] text-[#555]">
+                  Certificates
+                </p>
+                <p className="mt-2">
+                  정보처리기사 · SQLD · 리눅스마스터 2급
+                </p>
+              </div>
             </div>
           </section>
         </aside>
@@ -477,6 +529,7 @@ export default async function Home({
           <FooterColumn
             title="Contact"
             links={[
+              ["Resume", "/resume"],
               ["Email", emailUrl],
               ["LinkedIn", linkedInUrl],
               ["Blog", blogUrl],
