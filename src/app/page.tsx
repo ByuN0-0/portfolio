@@ -162,15 +162,15 @@ export default async function Home({
   return (
     <main className="min-h-screen bg-[#fffdf8] text-[#0a0a0a]">
       <header className="border-b border-black/[0.08] bg-[#fffdf8]">
-        <div className="mx-auto max-w-7xl px-5 py-6 sm:px-8">
-          <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-            <div>
+        <div className="mx-auto max-w-7xl px-5 py-5 sm:px-8">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
               <Link href="/" className="text-[36px] font-[340] leading-none tracking-[-0.96px]">
                 ByuN0-0.log
               </Link>
-              <p className="mt-3 max-w-xl text-[18px] font-[330] leading-[1.45] tracking-[-0.14px] text-[#111]">
-                백엔드 API, 운영 도구, 배치, 결제, 크롤링, 배포까지 제품 흐름을 연결하는 개발자
-              </p>
+              <span className="text-[14px] font-[330] leading-none tracking-[-0.14px] text-[#555]">
+                개발 포트폴리오
+              </span>
             </div>
             <nav className="flex flex-wrap gap-2 text-[15px] font-[480] text-[#0a0a0a]">
               <a href="#posts" className="rounded-full px-4 py-2 hover:bg-black hover:text-white">
@@ -214,7 +214,7 @@ export default async function Home({
                 </p>
               </div>
               <div className="grid gap-px bg-black/[0.12] lg:grid-cols-3">
-                {featuredProjects.map((project, index) => (
+                {featuredProjects.map((project) => (
                   <Link
                     key={project.slug}
                     href={`/projects/${project.slug}`}
@@ -226,7 +226,7 @@ export default async function Home({
                         alt={`${project.title} featured preview`}
                         fill
                         sizes="(max-width: 1024px) 100vw, 260px"
-                        priority={index === 0}
+                        loading="eager"
                         className="object-contain p-3 transition group-hover:scale-[1.02]"
                       />
                     </div>
