@@ -13,6 +13,11 @@ import {
 import { projects } from "@/data/projects";
 import { getFeaturedStacks } from "@/data/stack-groups";
 
+type HomeCategory = "all" | "company" | "business" | "personal" | "prototype";
+type HomeSearchParams = {
+  category?: string | string[];
+};
+
 function getLatestProjectDate(project: (typeof projects)[number]) {
   return project.milestones.reduce(
     (latest, milestone) => (milestone.date > latest ? milestone.date : latest),
@@ -20,7 +25,7 @@ function getLatestProjectDate(project: (typeof projects)[number]) {
   );
 }
 
-const homeProjects = [...projects].sort((a, b) => {
+const sortedProjects = [...projects].sort((a, b) => {
   const latestA = getLatestProjectDate(a);
   const latestB = getLatestProjectDate(b);
   return latestB.localeCompare(latestA);
@@ -28,25 +33,61 @@ const homeProjects = [...projects].sort((a, b) => {
 const githubProfileUrl = "https://github.com/ByuN0-0";
 const profileAvatarUrl = "/profile/avatar.webp";
 
-const categories: [string, number][] = [
-  ["회사 프로젝트", projects.filter((project) => project.category === "company").length],
-  ["사업 프로젝트", projects.filter((project) => project.category === "business").length],
-  ["개인 프로젝트", projects.filter((project) => project.category === "personal").length],
-  ["Prototype", projects.filter((project) => ["weather-app-android", "crm-platform"].includes(project.slug)).length],
-  ["Retrospective", projects.length],
+const filterablePrototypeSlugs = ["weather-app-android", "crm-platform"];
+const categories: { key: HomeCategory; name: string; count: number; href: string }[] = [
+  { key: "all", name: "전체", count: projects.length, href: "/" },
+  {
+    key: "company",
+    name: "회사 프로젝트",
+    count: projects.filter((project) => project.category === "company").length,
+    href: "/?category=company",
+  },
+  {
+    key: "business",
+    name: "사업 프로젝트",
+    count: projects.filter((project) => project.category === "business").length,
+    href: "/?category=business",
+  },
+  {
+    key: "personal",
+    name: "개인 프로젝트",
+    count: projects.filter((project) => project.category === "personal").length,
+    href: "/?category=personal",
+  },
+  {
+    key: "prototype",
+    name: "Prototype",
+    count: projects.filter((project) => filterablePrototypeSlugs.includes(project.slug)).length,
+    href: "/?category=prototype",
+  },
 ];
-
-const recentPosts = homeProjects.slice(0, 6).map((project) => ({
-  title: projectPostTitle(project.slug, project.title),
-  href: `/projects/${project.slug}`,
-  date: getLatestProjectDate(project).replaceAll("-", "."),
-}));
 
 const categoryLabel = {
   company: "회사 프로젝트",
   business: "사업 프로젝트",
   personal: "개인 프로젝트",
 } as const;
+
+function isHomeCategory(value: string): value is HomeCategory {
+  return categories.some((category) => category.key === value);
+}
+
+function getSelectedCategory(searchParams?: HomeSearchParams): HomeCategory {
+  const rawCategory = Array.isArray(searchParams?.category)
+    ? searchParams?.category[0]
+    : searchParams?.category;
+
+  return rawCategory && isHomeCategory(rawCategory) ? rawCategory : "all";
+}
+
+function filterProjects(category: HomeCategory) {
+  if (category === "all") return sortedProjects;
+  if (category === "prototype") {
+    return sortedProjects.filter((project) => filterablePrototypeSlugs.includes(project.slug));
+  }
+
+  return sortedProjects.filter((project) => project.category === category);
+}
 
 function projectPostTitle(slug: string, title: string) {
   if (slug === "weather-app-android") return `${title}: GPS 기반 Android 날씨 앱`;
@@ -80,7 +121,19 @@ function projectHomeSummary(slug: string) {
   return summaries[slug] ?? "";
 }
 
-export default function Home() {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams?: Promise<HomeSearchParams>;
+}) {
+  const selectedCategory = getSelectedCategory(await searchParams);
+  const homeProjects = filterProjects(selectedCategory);
+  const recentPosts = homeProjects.slice(0, 6).map((project) => ({
+    title: projectPostTitle(project.slug, project.title),
+    href: `/projects/${project.slug}`,
+    date: getLatestProjectDate(project).replaceAll("-", "."),
+  }));
+
   return (
     <main className="min-h-screen bg-[#08090a] text-[#f7f8f8]">
       <header className="border-b border-white/[0.06] bg-[#08090a]">
@@ -234,11 +287,25 @@ export default function Home() {
               카테고리
             </h2>
             <div className="space-y-3">
-              {categories.map(([name, count]) => (
-                <div key={name} className="flex items-center justify-between text-[14px]">
-                  <span className="text-[#d0d6e0]">{name}</span>
-                  <span className="text-[#62666d]">{count}</span>
-                </div>
+              {categories.map((category) => (
+                <Link
+                  key={category.key}
+                  href={category.href}
+                  className={`flex items-center justify-between rounded-[6px] px-2 py-1.5 text-[14px] transition ${
+                    selectedCategory === category.key
+                      ? "bg-white/[0.06] text-white"
+                      : "text-[#d0d6e0] hover:bg-white/[0.04] hover:text-white"
+                  }`}
+                >
+                  <span>{category.name}</span>
+                  <span
+                    className={
+                      selectedCategory === category.key ? "text-[#a8b0ff]" : "text-[#62666d]"
+                    }
+                  >
+                    {category.count}
+                  </span>
+                </Link>
               ))}
             </div>
           </section>
