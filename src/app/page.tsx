@@ -93,16 +93,16 @@ function filterProjects(category: HomeCategory) {
   return sortedProjects.filter((project) => project.category === category);
 }
 
-function projectPostTitle(slug: string, title: string) {
-  if (slug === "weather-app-android") return `${title}: GPS 기반 Android 날씨 앱`;
-  if (slug === "crm-platform") return `${title}: 동적 거래 속성을 가진 CRM 플랫폼`;
-  if (slug === "healthhola") return `${title}: 건강 체험단 모바일 앱과 백엔드`;
-  if (slug === "healthcatcher-web") return `${title}: 헬스캐처 공식 홈페이지`;
-  if (slug === "manjeom") return `${title}: 웹 기반 점자 학습 서비스`;
-  if (slug === "blynx-insight-platform") return `${title}: 야구 예측 플랫폼 운영 시스템`;
-  if (slug === "moonshot") return `${title}: LLM 챗봇 서비스 운영`;
-  if (slug === "rizzz") return `${title}: 종료 전 AI 소셜 플랫폼 품질 개선`;
-  return title;
+function projectPostDescription(slug: string) {
+  if (slug === "weather-app-android") return "GPS 기반 Android 날씨 앱";
+  if (slug === "crm-platform") return "동적 거래 속성을 가진 CRM 플랫폼";
+  if (slug === "healthhola") return "건강 체험단 모바일 앱과 백엔드";
+  if (slug === "healthcatcher-web") return "헬스캐처 공식 홈페이지";
+  if (slug === "manjeom") return "웹 기반 점자 학습 서비스";
+  if (slug === "blynx-insight-platform") return "야구 예측 플랫폼 운영 시스템";
+  if (slug === "moonshot") return "LLM 챗봇 서비스 운영";
+  if (slug === "rizzz") return "종료 전 AI 소셜 플랫폼 품질 개선";
+  return "";
 }
 
 function projectHomeSummary(slug: string) {
@@ -137,7 +137,8 @@ export default async function Home({
   const homeProjects = filterProjects(selectedCategory);
   const showFeaturedProjects = selectedCategory === "all";
   const recentPosts = homeProjects.slice(0, 6).map((project) => ({
-    title: projectPostTitle(project.slug, project.title),
+    title: project.title,
+    description: projectPostDescription(project.slug),
     href: `/projects/${project.slug}`,
     date: getLatestProjectDate(project).replaceAll("-", "."),
   }));
@@ -214,8 +215,13 @@ export default async function Home({
                       </span>
                       <span>{project.period}</span>
                     </div>
-                    <h3 className="text-[22px] font-[540] leading-[1.25] tracking-[-0.26px]">
-                      {projectPostTitle(project.slug, project.title)}
+                    <h3>
+                      <span className="block text-[24px] font-[540] leading-[1.15] tracking-[-0.26px]">
+                        {project.title}
+                      </span>
+                      <span className="mt-1.5 block text-[17px] font-[330] leading-[1.35] tracking-[-0.14px]">
+                        {projectPostDescription(project.slug)}
+                      </span>
                     </h3>
                     <p className="mt-3 overflow-hidden text-[15px] font-[330] leading-[1.45] tracking-[-0.14px] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3]">
                       {projectHomeSummary(project.slug)}
@@ -245,9 +251,14 @@ export default async function Home({
                   </div>
                   <Link
                     href={`/projects/${project.slug}`}
-                    className="block text-[34px] font-[340] leading-[1.12] tracking-[-0.96px] hover:underline"
+                    className="block hover:underline"
                   >
-                    {projectPostTitle(project.slug, project.title)}
+                    <span className="block text-[38px] font-[340] leading-[1.05] tracking-[-0.96px]">
+                      {project.title}
+                    </span>
+                    <span className="mt-2 block text-[24px] font-[330] leading-[1.22] tracking-[-0.26px]">
+                      {projectPostDescription(project.slug)}
+                    </span>
                   </Link>
                   <p className="mt-4 max-w-2xl overflow-hidden text-[18px] font-[330] leading-[1.45] tracking-[-0.14px] text-[#111] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3]">
                     {projectHomeSummary(project.slug)}
@@ -308,8 +319,13 @@ export default async function Home({
                   className="grid gap-2 px-6 py-5 transition hover:bg-black/[0.04] sm:grid-cols-[120px_minmax(0,1fr)]"
                 >
                   <span className="font-mono text-[12px] tracking-[0.08em] text-[#242424]">{post.date}</span>
-                  <span className="text-[18px] font-[330] leading-[1.45] tracking-[-0.14px] text-[#0a0a0a]">
-                    {post.title}
+                  <span className="text-[#0a0a0a]">
+                    <span className="block text-[18px] font-[540] leading-[1.25] tracking-[-0.26px]">
+                      {post.title}
+                    </span>
+                    <span className="mt-1 block text-[15px] font-[330] leading-[1.35] tracking-[-0.14px]">
+                      {post.description}
+                    </span>
                   </span>
                 </Link>
               ))}
