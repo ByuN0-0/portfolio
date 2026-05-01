@@ -42,6 +42,16 @@ const featuredProjectSlugs = ["blynx-insight-platform", "moonshot", "manjeom"];
 const featuredProjects = featuredProjectSlugs
   .map((slug) => projects.find((project) => project.slug === slug))
   .filter((project): project is (typeof projects)[number] => Boolean(project));
+const previewImageDimensions: Record<string, { width: number; height: number }> = {
+  "blynx-insight-platform": { width: 1924, height: 1788 },
+  moonshot: { width: 1732, height: 1440 },
+  rizzz: { width: 960, height: 640 },
+  healthhola: { width: 780, height: 1440 },
+  "healthcatcher-web": { width: 3456, height: 1800 },
+  manjeom: { width: 1440, height: 900 },
+  "weather-app-android": { width: 784, height: 1440 },
+  "crm-platform": { width: 960, height: 640 },
+};
 
 const filterablePrototypeSlugs = ["weather-app-android", "crm-platform"];
 const categories: { key: HomeCategory; name: string; count: number; href: string }[] = [
@@ -241,77 +251,78 @@ export default async function Home({
             </section>
           ) : null}
 
-          {homeProjects.map((project, index) => (
-            <article
-              key={project.slug}
-              className="overflow-hidden rounded-[24px] border border-black/[0.1] bg-white"
-            >
-              <div className="grid gap-0 md:grid-cols-[minmax(0,1fr)_280px]">
-                <div className="p-6 sm:p-8">
-                  <div className="mb-4 flex flex-wrap items-center gap-3 font-mono text-[12px] uppercase tracking-[0.08em] text-[#242424]">
-                    <span className="inline-flex items-center gap-2">
-                      <FolderOpen className="size-4" />
-                      {categoryLabel[project.category]}
-                    </span>
-                    <span className="inline-flex items-center gap-2">
-                      <CalendarDays className="size-4" />
-                      {project.period}
-                    </span>
-                  </div>
-                  <Link
-                    href={`/projects/${project.slug}`}
-                    className="block hover:underline"
-                  >
-                    <span className="block text-[38px] font-[340] leading-[1.05] tracking-[-0.96px]">
-                      {project.title}
-                    </span>
-                    <span className="mt-2 block text-[22px] font-[480] leading-[1.25] tracking-[-0.26px] text-[#0a0a0a]">
-                      {projectPostDescription(project.slug)}
-                    </span>
-                  </Link>
-                  <p className="mt-4 max-w-2xl overflow-hidden text-[17px] font-[330] leading-[1.5] tracking-[-0.14px] text-[#333] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3]">
-                    {projectHomeSummary(project.slug)}
-                  </p>
-                  <div className="mt-6 flex flex-wrap gap-2">
-                    {getFeaturedStacks(project.slug, project.stacks).map((stack) => (
-                      <span
-                        key={stack}
-                        className="rounded-full border border-black/[0.14] px-3 py-1.5 text-[12px] font-[480] text-[#0a0a0a]"
-                      >
-                        {stack}
+          {homeProjects.map((project, index) => {
+            const previewSize = previewImageDimensions[project.slug] ?? {
+              width: 960,
+              height: 640,
+            };
+
+            return (
+              <article
+                key={project.slug}
+                className="overflow-hidden rounded-[24px] border border-black/[0.1] bg-white"
+              >
+                <div className="grid gap-0 md:grid-cols-[minmax(0,1fr)_280px]">
+                  <div className="p-6 sm:p-8">
+                    <div className="mb-4 flex flex-wrap items-center gap-3 font-mono text-[12px] uppercase tracking-[0.08em] text-[#242424]">
+                      <span className="inline-flex items-center gap-2">
+                        <FolderOpen className="size-4" />
+                        {categoryLabel[project.category]}
                       </span>
-                    ))}
+                      <span className="inline-flex items-center gap-2">
+                        <CalendarDays className="size-4" />
+                        {project.period}
+                      </span>
+                    </div>
+                    <Link
+                      href={`/projects/${project.slug}`}
+                      className="block hover:underline"
+                    >
+                      <span className="block text-[38px] font-[340] leading-[1.05] tracking-[-0.96px]">
+                        {project.title}
+                      </span>
+                      <span className="mt-2 block text-[22px] font-[480] leading-[1.25] tracking-[-0.26px] text-[#0a0a0a]">
+                        {projectPostDescription(project.slug)}
+                      </span>
+                    </Link>
+                    <p className="mt-4 max-w-2xl overflow-hidden text-[17px] font-[330] leading-[1.5] tracking-[-0.14px] text-[#333] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3]">
+                      {projectHomeSummary(project.slug)}
+                    </p>
+                    <div className="mt-6 flex flex-wrap gap-2">
+                      {getFeaturedStacks(project.slug, project.stacks).map((stack) => (
+                        <span
+                          key={stack}
+                          className="rounded-full border border-black/[0.14] px-3 py-1.5 text-[12px] font-[480] text-[#0a0a0a]"
+                        >
+                          {stack}
+                        </span>
+                      ))}
+                    </div>
+                    <Link
+                      href={`/projects/${project.slug}`}
+                      className="mt-8 inline-flex items-center gap-2 rounded-full bg-black px-5 py-2.5 text-[15px] font-[480] text-white hover:bg-[#2a2a2a]"
+                    >
+                      글 읽기
+                      <ArrowRight className="size-4" />
+                    </Link>
                   </div>
                   <Link
                     href={`/projects/${project.slug}`}
-                    className="mt-8 inline-flex items-center gap-2 rounded-full bg-black px-5 py-2.5 text-[15px] font-[480] text-white hover:bg-[#2a2a2a]"
+                    className="relative flex min-h-[260px] items-center justify-center border-t border-black/[0.08] bg-[#f1f0eb] p-5 md:border-l md:border-t-0"
                   >
-                    글 읽기
-                    <ArrowRight className="size-4" />
-                  </Link>
-                </div>
-                <Link
-                  href={`/projects/${project.slug}`}
-                  className="relative flex min-h-[260px] items-center justify-center border-t border-black/[0.08] bg-[#f1f0eb] p-5 md:border-l md:border-t-0"
-                >
-                  <div className="overflow-hidden rounded-[8px] bg-white">
                     <Image
                       src={project.heroImage}
                       alt={`${project.title} preview`}
-                      width={720}
-                      height={1280}
+                      width={previewSize.width}
+                      height={previewSize.height}
                       priority={index === 0}
-                      className={
-                        project.slug === "healthcatcher-web"
-                          ? "h-auto w-full object-contain"
-                          : "h-[260px] w-auto max-w-full object-contain"
-                      }
+                      className="h-auto max-h-[320px] w-auto max-w-full rounded-[8px]"
                     />
-                  </div>
-                </Link>
-              </div>
-            </article>
-          ))}
+                  </Link>
+                </div>
+              </article>
+            );
+          })}
 
           <section className="rounded-[24px] bg-[#f5e6ff]">
             <div className="border-b border-black/[0.1] px-6 py-5">

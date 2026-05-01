@@ -65,13 +65,16 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   }[project.category];
   const stackReasons = getStackReasons(project.slug);
   const stackSections = getStackSections(project.slug, project.stacks);
-  const postTitle = (() => {
-    if (isWeatherProject) return `${project.title}: 첫 Android 프로젝트를 다시 읽기`;
-    if (isCrmProject) return `${project.title}: 동적 거래 속성을 가진 CRM 플랫폼 만들기`;
-    if (isHealthHola) return `${project.title}: 사업 프로젝트에서 앱과 백엔드를 함께 만들기`;
-    if (isHealthCatcherWeb) return `${project.title}: 헬스캐처 공식 홈페이지 만들기`;
-    if (isManjeom) return `${project.title}: 웹 기반 점자 학습 서비스 만들기`;
-    return project.title;
+  const postSubtitle = (() => {
+    if (isWeatherProject) return "첫 Android 프로젝트를 다시 읽기";
+    if (isCrmProject) return "동적 거래 속성을 가진 CRM 플랫폼 만들기";
+    if (isHealthHola) return "사업 프로젝트에서 앱과 백엔드를 함께 만들기";
+    if (isHealthCatcherWeb) return "헬스캐처 공식 홈페이지 만들기";
+    if (isManjeom) return "웹 기반 점자 학습 서비스 만들기";
+    if (project.slug === "blynx-insight-platform") return "야구 예측 플랫폼 운영 시스템";
+    if (project.slug === "moonshot") return "LLM 챗봇 서비스 운영";
+    if (project.slug === "rizzz") return "종료 전 AI 소셜 플랫폼 품질 개선";
+    return project.subtitle;
   })();
   const headerSummary = (() => {
     if (project.slug === "blynx-insight-platform") {
@@ -195,8 +198,13 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 {project.team}
               </span>
             </div>
-            <h1 className="max-w-4xl text-[42px] font-[340] leading-[1.04] tracking-[-0.96px] sm:text-[64px]">
-              {postTitle}
+            <h1 className="max-w-4xl">
+              <span className="block text-[42px] font-[340] leading-[1.04] tracking-[-0.96px] sm:text-[64px]">
+                {project.title}
+              </span>
+              <span className="mt-3 block text-[24px] font-[480] leading-[1.25] tracking-[-0.26px] sm:text-[30px]">
+                {postSubtitle}
+              </span>
             </h1>
             <p className="mt-6 max-w-3xl text-[20px] font-[330] leading-[1.4] tracking-[-0.14px] text-[#0a0a0a]">
               {headerSummary}
