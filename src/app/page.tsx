@@ -19,6 +19,7 @@ const homeProjects = [...projects].sort((a, b) => {
 });
 const weatherProject = projects.find((project) => project.slug === "weather-app-android") ?? projects[0];
 const githubProfileUrl = "https://github.com/ByuN0-0";
+const profileAvatarUrl = "/profile/avatar.webp";
 
 const categories = [
   ["Business", 2],
@@ -202,9 +203,13 @@ export default function Home() {
         <aside id="profile" className="space-y-5 lg:sticky lg:top-6 lg:self-start">
           <section className="rounded-[8px] border border-white/[0.08] bg-white/[0.02] p-5">
             <div className="flex items-center gap-3">
-              <div className="grid size-12 place-items-center rounded-[8px] bg-[#5e6ad2] text-[20px] font-semibold">
-                B
-              </div>
+              <Image
+                src={profileAvatarUrl}
+                alt="ByuN0-0 profile"
+                width={48}
+                height={48}
+                className="size-12 rounded-full border border-white/[0.12] object-cover"
+              />
               <div>
                 <p className="text-[17px] font-medium">ByuN0-0</p>
                 <p className="text-[13px] text-[#8a8f98]">Portfolio Blog</p>
