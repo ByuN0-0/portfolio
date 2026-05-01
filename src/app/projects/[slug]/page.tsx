@@ -156,12 +156,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   })();
 
   return (
-    <main className="min-h-screen bg-[#08090a] text-[#f7f8f8]">
-      <header className="border-b border-white/[0.06] bg-[#08090a]">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-5">
+    <main className="min-h-screen bg-[#fffdf8] text-[#0a0a0a]">
+      <header className="border-b border-black/[0.08] bg-[#fffdf8]">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 sm:px-8">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-[14px] font-medium text-[#d0d6e0] hover:text-white"
+            className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-[15px] font-[480] text-[#0a0a0a] hover:bg-black hover:text-white"
           >
             <ArrowLeft className="size-4" />
             ByuN0-0.log
@@ -170,7 +170,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             href={project.repositoryUrl}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2 rounded-[6px] border border-white/[0.08] bg-white/[0.02] px-3 py-2 text-[13px] font-medium text-[#d0d6e0] hover:bg-white/[0.05] hover:text-white"
+            className="inline-flex items-center gap-2 rounded-full bg-black px-4 py-2 text-[15px] font-[480] text-white hover:bg-[#2a2a2a]"
           >
             <GitBranch className="size-4" />
             GitHub
@@ -178,12 +178,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </div>
       </header>
 
-      <div className="mx-auto grid max-w-6xl gap-8 px-5 py-8 lg:grid-cols-[minmax(0,1fr)_280px]">
+      <div className="mx-auto grid max-w-7xl gap-8 px-5 py-10 sm:px-8 lg:grid-cols-[minmax(0,1fr)_300px]">
         <article className="min-w-0">
-          <div className="border-b border-white/[0.06] px-6 py-8 sm:px-9 sm:py-10">
-            <div className="mb-5 flex flex-wrap gap-3 text-[13px] text-[#8a8f98]">
+          <div className="rounded-[24px] bg-[#f5e6ff] px-6 py-10 sm:px-10 sm:py-12">
+            <div className="mb-6 flex flex-wrap gap-3 font-mono text-[12px] uppercase tracking-[0.08em] text-[#242424]">
               <span className="inline-flex items-center gap-2">
-                <BookOpen className="size-4 text-[#7170ff]" />
+                <BookOpen className="size-4" />
                 프로젝트 회고
               </span>
               <span className="inline-flex items-center gap-2">
@@ -195,26 +195,26 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 {project.team}
               </span>
             </div>
-            <h1 className="text-[36px] font-normal leading-[1.18] tracking-[-0.704px] sm:text-[48px] sm:tracking-[-1.056px]">
+            <h1 className="max-w-4xl text-[42px] font-[340] leading-[1.04] tracking-[-0.96px] sm:text-[64px]">
               {postTitle}
             </h1>
-            <p className="mt-5 max-w-3xl text-[17px] leading-[1.75] text-[#d0d6e0]">
+            <p className="mt-6 max-w-3xl text-[20px] font-[330] leading-[1.4] tracking-[-0.14px] text-[#0a0a0a]">
               {headerSummary}
             </p>
           </div>
 
-          <div className="space-y-12 px-6 py-8 sm:px-9 sm:py-10">
+          <div className="space-y-16 px-1 py-12 sm:px-0">
             <PostSection id="overview" title="프로젝트 소개">
               <p>{overviewText}</p>
-              <dl className="mt-6 grid gap-5 border-y border-white/[0.06] py-5 sm:grid-cols-3">
+              <dl className="mt-8 grid gap-5 rounded-[24px] bg-[#e6f5a6] p-6 sm:grid-cols-3">
                 {[
                   ["역할", project.role],
                   ["형태", project.team],
                   ["상태", statusLabel],
                 ].map(([label, value]) => (
                   <div key={label}>
-                    <dt className="text-[13px] text-[#62666d]">{label}</dt>
-                    <dd className="mt-2 text-[14px] leading-6 text-[#d0d6e0]">
+                    <dt className="font-mono text-[12px] uppercase tracking-[0.08em] text-[#242424]">{label}</dt>
+                    <dd className="mt-2 text-[16px] font-[480] leading-6 text-[#0a0a0a]">
                       {value}
                     </dd>
                   </div>
@@ -225,19 +225,19 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             {isWeatherProject || isCrmProject ? (
               <section id="prototype" className="scroll-mt-20">
                 <div className="mb-5">
-                  <p className="text-[13px] font-medium uppercase text-[#7170ff]">
+                  <p className="font-mono text-[12px] uppercase tracking-[0.08em] text-[#242424]">
                     Prototype
                   </p>
-                  <h2 className="mt-2 text-[28px] font-normal tracking-[-0.288px]">
+                  <h2 className="mt-2 text-[32px] font-[340] tracking-[-0.96px]">
                     프로토타입
                   </h2>
-                  <p className="mt-3 text-[16px] leading-[1.75] text-[#8a8f98]">
+                  <p className="mt-3 max-w-3xl text-[18px] font-[330] leading-[1.45] tracking-[-0.14px] text-[#0a0a0a]">
                     {isWeatherProject
                       ? "Android 프로젝트의 배경 이미지, 반투명 패널, 하단 탭 구조를 가져와 서울 좌표 기준 실제 OpenWeatherMap 데이터로 표시합니다."
                       : "원본 CRM의 회사 사이드바, 거래 그리드, 속성 추가/편집/삭제 흐름을 브라우저 localStorage 저장 방식으로 재현했습니다."}
                   </p>
                 </div>
-                <div className="-mx-6 border-y border-white/[0.06] bg-[#0f1011] sm:-mx-9">
+                <div className="overflow-hidden rounded-[24px] bg-[#111]">
                   {isWeatherProject ? <WeatherPhone /> : <CrmPrototype />}
                 </div>
               </section>
@@ -246,22 +246,22 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             {isHealthCatcherWeb ? (
               <section id="visual" className="scroll-mt-20">
                 <div className="mb-5">
-                  <p className="text-[13px] font-medium uppercase text-[#7170ff]">
+                  <p className="font-mono text-[12px] uppercase tracking-[0.08em] text-[#242424]">
                     Main Screen
                   </p>
-                  <h2 className="mt-2 text-[28px] font-normal tracking-[-0.288px]">
+                  <h2 className="mt-2 text-[32px] font-[340] tracking-[-0.96px]">
                     홈페이지 메인 화면
                   </h2>
-                  <p className="mt-3 text-[16px] leading-[1.75] text-[#8a8f98]">
+                  <p className="mt-3 max-w-3xl text-[18px] font-[330] leading-[1.45] tracking-[-0.14px] text-[#0a0a0a]">
                     배포된 헬스캐처 홈페이지의 첫 화면 구성을 포트폴리오 안에서 다시 보여줍니다.
                   </p>
                 </div>
-                <div className="overflow-hidden rounded-[8px] border border-white/[0.08] bg-[#0f1011]">
-                  <div className="flex items-center gap-2 border-b border-white/[0.06] px-4 py-3">
+                <div className="overflow-hidden rounded-[24px] border border-black/[0.1] bg-white">
+                  <div className="flex items-center gap-2 border-b border-black/[0.08] px-4 py-3">
                     <span className="size-2.5 rounded-full bg-[#ef4444]" />
                     <span className="size-2.5 rounded-full bg-[#f59e0b]" />
                     <span className="size-2.5 rounded-full bg-[#10b981]" />
-                    <span className="ml-3 text-[12px] text-[#8a8f98]">
+                    <span className="ml-3 font-mono text-[12px] uppercase tracking-[0.08em] text-[#242424]">
                       healthcatcher-web.vercel.app
                     </span>
                   </div>
@@ -281,17 +281,17 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             {isManjeom ? (
               <section id="visual" className="scroll-mt-20">
                 <div className="mb-5">
-                  <p className="text-[13px] font-medium uppercase text-[#7170ff]">
+                  <p className="font-mono text-[12px] uppercase tracking-[0.08em] text-[#242424]">
                     Main Screen
                   </p>
-                  <h2 className="mt-2 text-[28px] font-normal tracking-[-0.288px]">
+                  <h2 className="mt-2 text-[32px] font-[340] tracking-[-0.96px]">
                     서비스 메인 화면
                   </h2>
-                  <p className="mt-3 text-[16px] leading-[1.75] text-[#8a8f98]">
+                  <p className="mt-3 max-w-3xl text-[18px] font-[330] leading-[1.45] tracking-[-0.14px] text-[#0a0a0a]">
                     배포된 만점 서비스의 첫 화면을 캡처해 학습 시작, 점자 변환기, 점자표 진입 흐름을 보여줍니다.
                   </p>
                 </div>
-                <div className="overflow-hidden rounded-[8px] border border-white/[0.08] bg-[#0f1011]">
+                <div className="overflow-hidden rounded-[24px] border border-black/[0.1] bg-white">
                   <Image
                     src={project.heroImage}
                     alt={`${project.title} main screen`}
@@ -306,17 +306,17 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             {project.category === "company" ? (
               <section id="visual" className="scroll-mt-20">
                 <div className="mb-5">
-                  <p className="text-[13px] font-medium uppercase text-[#7170ff]">
+                  <p className="font-mono text-[12px] uppercase tracking-[0.08em] text-[#242424]">
                     Company Work
                   </p>
-                  <h2 className="mt-2 text-[28px] font-normal tracking-[-0.288px]">
+                  <h2 className="mt-2 text-[32px] font-[340] tracking-[-0.96px]">
                     회사 프로젝트 범위
                   </h2>
-                  <p className="mt-3 text-[16px] leading-[1.75] text-[#8a8f98]">
+                  <p className="mt-3 max-w-3xl text-[18px] font-[330] leading-[1.45] tracking-[-0.14px] text-[#0a0a0a]">
                     실제 담당했던 백엔드, 프론트엔드, 배치, 결제, 인프라 영역을 중심으로 묶었습니다.
                   </p>
                 </div>
-                <div className="overflow-hidden rounded-[8px] border border-white/[0.08] bg-[#0f1011]">
+                <div className="overflow-hidden rounded-[24px] border border-black/[0.1] bg-white">
                   <Image
                     src={project.heroImage}
                     alt={`${project.title} work scope preview`}
@@ -338,25 +338,25 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
             <PostSection id="stack" title="사용 기술">
               <p>{stackText}</p>
-              <div className="mt-4 space-y-5">
+              <div className="mt-6 space-y-6">
                 {stackSections.map((section) => (
-                  <section key={section.label}>
-                    <h3 className="mb-2.5 text-[18px] font-medium leading-[1.4] text-[#f7f8f8]">
+                  <section key={section.label} className="rounded-[24px] bg-[#f1f0eb] p-5">
+                    <h3 className="mb-3 text-[22px] font-[540] leading-[1.35] tracking-[-0.26px] text-[#0a0a0a]">
                       {section.label}
                     </h3>
                     <div className="space-y-3">
                       {section.groups.map((group) => (
                         <div key={`${section.label}-${group.label}`}>
-                          <p className="mb-1.5 text-[12px] font-medium uppercase tracking-[0.08em] text-[#7170ff]">
+                          <p className="mb-2 font-mono text-[12px] uppercase tracking-[0.08em] text-[#242424]">
                             {group.label}
                           </p>
                           <div className="space-y-2.5">
                             {group.stacks.map((stack) => (
                               <div key={stack}>
-                                <p className="text-[15px] font-medium leading-[1.45] text-[#f7f8f8]">
+                                <p className="text-[16px] font-[540] leading-[1.45] text-[#0a0a0a]">
                                   {stack}
                                 </p>
-                                <p className="mt-0.5 text-[14px] leading-[1.55] text-[#8a8f98]">
+                                <p className="mt-0.5 text-[15px] font-[330] leading-[1.45] tracking-[-0.14px] text-[#242424]">
                                   {stackReasons[stack] ??
                                     "프로젝트 요구사항과 기존 구조에 맞춰 사용했습니다."}
                                 </p>
@@ -391,17 +391,17 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </article>
 
         <aside className="space-y-5 lg:sticky lg:top-6 lg:self-start">
-          <section className="rounded-[8px] border border-white/[0.08] bg-white/[0.02] p-5">
-            <p className="text-[13px] text-[#62666d]">Category</p>
-            <p className="mt-2 text-[18px] font-medium">{categoryLabel}</p>
-            <p className="mt-3 text-[14px] leading-[1.7] text-[#8a8f98]">
+          <section className="rounded-[24px] bg-[#f1f0eb] p-5 text-[#0a0a0a]">
+            <p className="font-mono text-[12px] uppercase tracking-[0.08em] text-[#555]">Category</p>
+            <p className="mt-2 text-[20px] font-[540]">{categoryLabel}</p>
+            <p className="mt-3 text-[15px] font-[330] leading-[1.45] tracking-[-0.14px] text-[#111]">
               실제 서비스에서 맡았던 기능과 운영 경험을 중심으로 정리한 프로젝트입니다.
             </p>
           </section>
 
-          <section className="rounded-[8px] border border-white/[0.08] bg-white/[0.02] p-5">
-            <p className="mb-4 text-[15px] font-medium">목차</p>
-            <nav className="space-y-3 text-[14px] text-[#d0d6e0]">
+          <section className="rounded-[24px] border border-black/[0.1] bg-white p-5">
+            <p className="mb-4 text-[18px] font-[540]">목차</p>
+            <nav className="space-y-2 text-[14px] font-[480] text-[#0a0a0a]">
               {[
                 ["소개", "#overview"],
                 [isHealthCatcherWeb || isManjeom ? "메인 화면" : project.category === "company" ? "프로젝트 범위" : "프로토타입", isHealthCatcherWeb || isManjeom || project.category === "company" ? "#visual" : "#prototype"],
@@ -412,7 +412,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               ]
                 .filter(([, href]) => href !== "#prototype" || isWeatherProject || isCrmProject)
                 .map(([label, href]) => (
-                <a key={href} href={href} className="block hover:text-white">
+                  <a key={href} href={href} className="block rounded-full px-3 py-2 hover:bg-black/[0.06]">
                   {label}
                 </a>
               ))}
@@ -423,7 +423,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             href={project.repositoryUrl}
             target="_blank"
             rel="noreferrer"
-            className="flex items-center justify-between rounded-[8px] border border-white/[0.08] bg-[#5e6ad2] px-5 py-4 text-[14px] font-medium text-white transition hover:bg-[#828fff]"
+            className="flex items-center justify-between rounded-full bg-black px-5 py-4 text-[15px] font-[480] text-white transition hover:bg-[#2a2a2a]"
           >
             저장소 보기
             <GitBranch className="size-4" />
@@ -434,7 +434,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               href={project.liveUrl}
               target="_blank"
               rel="noreferrer"
-              className="flex items-center justify-between rounded-[8px] border border-white/[0.08] bg-white/[0.02] px-5 py-4 text-[14px] font-medium text-[#d0d6e0] transition hover:bg-white/[0.05] hover:text-white"
+              className="flex items-center justify-between rounded-full bg-white px-5 py-4 text-[15px] font-[480] text-[#0a0a0a] ring-1 ring-black/[0.1] transition hover:bg-black hover:text-white"
             >
               배포 사이트
               <ExternalLink className="size-4" />
@@ -456,8 +456,8 @@ function PostSection({
   children: React.ReactNode;
 }) {
   return (
-    <section id={id} className="scroll-mt-20 text-[16px] leading-[1.85] text-[#d0d6e0]">
-      <h2 className="mb-4 border-b border-white/[0.06] pb-3 text-[26px] font-normal leading-[1.3] tracking-[-0.288px] text-[#f7f8f8]">
+    <section id={id} className="scroll-mt-20 text-[18px] font-[320] leading-[1.55] tracking-[-0.26px] text-[#0a0a0a]">
+      <h2 className="mb-5 border-b border-black/[0.1] pb-4 text-[32px] font-[340] leading-[1.1] tracking-[-0.96px] text-[#0a0a0a] sm:text-[44px]">
         {title}
       </h2>
       {children}

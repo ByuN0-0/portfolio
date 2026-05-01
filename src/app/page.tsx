@@ -143,30 +143,30 @@ export default async function Home({
   }));
 
   return (
-    <main className="min-h-screen bg-[#08090a] text-[#f7f8f8]">
-      <header className="border-b border-white/[0.06] bg-[#08090a]">
-        <div className="mx-auto max-w-6xl px-5 py-8">
+    <main className="min-h-screen bg-[#fffdf8] text-[#0a0a0a]">
+      <header className="border-b border-black/[0.08] bg-[#fffdf8]">
+        <div className="mx-auto max-w-7xl px-5 py-6 sm:px-8">
           <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <Link href="/" className="text-[32px] font-normal leading-none tracking-[-0.704px]">
+              <Link href="/" className="text-[36px] font-[340] leading-none tracking-[-0.96px]">
                 ByuN0-0.log
               </Link>
-              <p className="mt-3 text-[15px] leading-[1.6] tracking-[-0.165px] text-[#8a8f98]">
+              <p className="mt-3 max-w-xl text-[18px] font-[330] leading-[1.45] tracking-[-0.14px] text-[#111]">
                 서비스 운영과 제품 구현 경험을 글처럼 쌓아두는 개발 포트폴리오
               </p>
             </div>
-            <nav className="flex gap-5 text-[14px] font-medium text-[#d0d6e0]">
-              <a href="#posts" className="hover:text-white">
+            <nav className="flex flex-wrap gap-2 text-[15px] font-[480] text-[#0a0a0a]">
+              <a href="#posts" className="rounded-full px-4 py-2 hover:bg-black hover:text-white">
                 글
               </a>
-              <a href="#profile" className="hover:text-white">
+              <a href="#profile" className="rounded-full px-4 py-2 hover:bg-black hover:text-white">
                 프로필
               </a>
               <a
                 href={githubProfileUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="hover:text-white"
+                className="rounded-full bg-black px-4 py-2 text-white hover:bg-[#2a2a2a]"
               >
                 GitHub
               </a>
@@ -175,49 +175,49 @@ export default async function Home({
         </div>
       </header>
 
-      <div className="mx-auto grid max-w-6xl gap-8 px-5 py-8 lg:grid-cols-[minmax(0,1fr)_300px]">
+      <div className="mx-auto grid max-w-7xl gap-8 px-5 py-10 sm:px-8 lg:grid-cols-[minmax(0,1fr)_300px]">
         <section id="posts" className="space-y-8">
           {showFeaturedProjects ? (
-            <section className="rounded-[8px] border border-white/[0.08] bg-white/[0.02]">
-              <div className="border-b border-white/[0.06] px-6 py-5 sm:px-8">
-                <p className="text-[13px] font-medium uppercase tracking-[0.08em] text-[#7170ff]">
+            <section className="overflow-hidden rounded-[24px] bg-[#e6f5a6] text-[#0a0a0a]">
+              <div className="px-6 py-8 sm:px-10 sm:py-10">
+                <p className="font-mono text-[12px] font-normal uppercase tracking-[0.12em]">
                   Featured
                 </p>
-                <h2 className="mt-2 text-[24px] font-normal tracking-[-0.288px]">
+                <h2 className="mt-4 max-w-3xl text-[42px] font-[340] leading-[1.04] tracking-[-0.96px] sm:text-[56px]">
                   대표 프로젝트
                 </h2>
-                <p className="mt-2 max-w-2xl text-[14px] leading-[1.7] text-[#8a8f98]">
+                <p className="mt-4 max-w-2xl text-[18px] font-[330] leading-[1.45] tracking-[-0.14px]">
                   실서비스 운영, AI 제품 개발, 개인 서비스 구현 경험이 가장 잘 드러나는 작업입니다.
                 </p>
               </div>
-              <div className="grid divide-y divide-white/[0.06] lg:grid-cols-3 lg:divide-x lg:divide-y-0">
+              <div className="grid gap-px bg-black/[0.12] lg:grid-cols-3">
                 {featuredProjects.map((project, index) => (
                   <Link
                     key={project.slug}
                     href={`/projects/${project.slug}`}
-                    className="group block p-5 transition hover:bg-white/[0.03] sm:p-6"
+                    className="group block bg-[#e6f5a6] p-5 transition hover:bg-[#deee98] sm:p-6"
                   >
-                    <div className="relative mb-5 aspect-[16/10] overflow-hidden rounded-[8px] border border-white/[0.08] bg-[#0f1011]">
+                    <div className="relative mb-5 aspect-[16/10] overflow-hidden rounded-[16px] bg-white">
                       <Image
                         src={project.heroImage}
                         alt={`${project.title} featured preview`}
                         fill
                         sizes="(max-width: 1024px) 100vw, 260px"
                         priority={index === 0}
-                        className="object-contain p-3 opacity-90 transition group-hover:scale-[1.02]"
+                        className="object-contain p-3 transition group-hover:scale-[1.02]"
                       />
                     </div>
-                    <div className="mb-3 flex flex-wrap items-center gap-2 text-[12px] text-[#8a8f98]">
+                    <div className="mb-3 flex flex-wrap items-center gap-2 text-[12px] text-[#202020]">
                       <span className="inline-flex items-center gap-1.5">
-                        <FolderOpen className="size-3.5 text-[#7170ff]" />
+                        <FolderOpen className="size-3.5" />
                         {categoryLabel[project.category]}
                       </span>
                       <span>{project.period}</span>
                     </div>
-                    <h3 className="text-[21px] font-normal leading-[1.25] tracking-[-0.288px] group-hover:text-[#d0d6e0]">
+                    <h3 className="text-[22px] font-[540] leading-[1.25] tracking-[-0.26px]">
                       {projectPostTitle(project.slug, project.title)}
                     </h3>
-                    <p className="mt-3 overflow-hidden text-[14px] leading-[1.65] text-[#8a8f98] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3]">
+                    <p className="mt-3 overflow-hidden text-[15px] font-[330] leading-[1.45] tracking-[-0.14px] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3]">
                       {projectHomeSummary(project.slug)}
                     </p>
                   </Link>
@@ -229,13 +229,13 @@ export default async function Home({
           {homeProjects.map((project, index) => (
             <article
               key={project.slug}
-              className="overflow-hidden rounded-[8px] border border-white/[0.08] bg-white/[0.02]"
+              className="overflow-hidden rounded-[24px] border border-black/[0.1] bg-white"
             >
               <div className="grid gap-0 md:grid-cols-[minmax(0,1fr)_280px]">
                 <div className="p-6 sm:p-8">
-                  <div className="mb-4 flex flex-wrap items-center gap-3 text-[13px] text-[#8a8f98]">
+                  <div className="mb-4 flex flex-wrap items-center gap-3 font-mono text-[12px] uppercase tracking-[0.08em] text-[#242424]">
                     <span className="inline-flex items-center gap-2">
-                      <FolderOpen className="size-4 text-[#7170ff]" />
+                      <FolderOpen className="size-4" />
                       {categoryLabel[project.category]}
                     </span>
                     <span className="inline-flex items-center gap-2">
@@ -245,18 +245,18 @@ export default async function Home({
                   </div>
                   <Link
                     href={`/projects/${project.slug}`}
-                    className="block text-[32px] font-normal leading-[1.18] tracking-[-0.704px] hover:text-[#d0d6e0]"
+                    className="block text-[34px] font-[340] leading-[1.12] tracking-[-0.96px] hover:underline"
                   >
                     {projectPostTitle(project.slug, project.title)}
                   </Link>
-                  <p className="mt-4 max-w-2xl overflow-hidden text-[16px] leading-[1.7] text-[#d0d6e0] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3]">
+                  <p className="mt-4 max-w-2xl overflow-hidden text-[18px] font-[330] leading-[1.45] tracking-[-0.14px] text-[#111] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3]">
                     {projectHomeSummary(project.slug)}
                   </p>
                   <div className="mt-6 flex flex-wrap gap-2">
                     {getFeaturedStacks(project.slug, project.stacks).map((stack) => (
                       <span
                         key={stack}
-                        className="rounded-full border border-[#23252a] px-3 py-1 text-[12px] font-medium text-[#d0d6e0]"
+                        className="rounded-full border border-black/[0.14] px-3 py-1.5 text-[12px] font-[480] text-[#0a0a0a]"
                       >
                         {stack}
                       </span>
@@ -264,7 +264,7 @@ export default async function Home({
                   </div>
                   <Link
                     href={`/projects/${project.slug}`}
-                    className="mt-8 inline-flex items-center gap-2 text-[14px] font-medium text-[#828fff] hover:text-[#a8b0ff]"
+                    className="mt-8 inline-flex items-center gap-2 rounded-full bg-black px-5 py-2.5 text-[15px] font-[480] text-white hover:bg-[#2a2a2a]"
                   >
                     글 읽기
                     <ArrowRight className="size-4" />
@@ -272,9 +272,9 @@ export default async function Home({
                 </div>
                 <Link
                   href={`/projects/${project.slug}`}
-                  className="relative flex min-h-[260px] items-center justify-center border-t border-white/[0.06] bg-[#0f1011] p-5 md:border-l md:border-t-0"
+                  className="relative flex min-h-[260px] items-center justify-center border-t border-black/[0.08] bg-[#f1f0eb] p-5 md:border-l md:border-t-0"
                 >
-                  <div className="overflow-hidden rounded-[10px] border border-white/[0.08] bg-black/20">
+                  <div className="overflow-hidden rounded-[8px] bg-white">
                     <Image
                       src={project.heroImage}
                       alt={`${project.title} preview`}
@@ -283,8 +283,8 @@ export default async function Home({
                       priority={index === 0}
                       className={
                         project.slug === "healthcatcher-web"
-                          ? "h-auto w-full object-contain opacity-90"
-                          : "h-[260px] w-auto max-w-full object-contain opacity-90"
+                          ? "h-auto w-full object-contain"
+                          : "h-[260px] w-auto max-w-full object-contain"
                       }
                     />
                   </div>
@@ -293,22 +293,22 @@ export default async function Home({
             </article>
           ))}
 
-          <section className="rounded-[8px] border border-white/[0.08] bg-white/[0.02]">
-            <div className="border-b border-white/[0.06] px-6 py-4">
-              <h2 className="flex items-center gap-2 text-[18px] font-medium">
-                <BookOpen className="size-5 text-[#7170ff]" />
+          <section className="rounded-[24px] bg-[#f5e6ff]">
+            <div className="border-b border-black/[0.1] px-6 py-5">
+              <h2 className="flex items-center gap-2 text-[24px] font-[540] tracking-[-0.26px]">
+                <BookOpen className="size-5" />
                 최근 글
               </h2>
             </div>
-            <div className="divide-y divide-white/[0.06]">
+            <div className="divide-y divide-black/[0.08]">
               {recentPosts.map((post) => (
                 <Link
                   key={post.title}
                   href={post.href}
-                  className="grid gap-2 px-6 py-5 transition hover:bg-white/[0.03] sm:grid-cols-[120px_minmax(0,1fr)]"
+                  className="grid gap-2 px-6 py-5 transition hover:bg-black/[0.04] sm:grid-cols-[120px_minmax(0,1fr)]"
                 >
-                  <span className="text-[13px] text-[#62666d]">{post.date}</span>
-                  <span className="text-[16px] leading-[1.5] text-[#d0d6e0]">
+                  <span className="font-mono text-[12px] tracking-[0.08em] text-[#242424]">{post.date}</span>
+                  <span className="text-[18px] font-[330] leading-[1.45] tracking-[-0.14px] text-[#0a0a0a]">
                     {post.title}
                   </span>
                 </Link>
@@ -318,29 +318,31 @@ export default async function Home({
         </section>
 
         <aside id="profile" className="space-y-5 lg:sticky lg:top-6 lg:self-start">
-          <section className="rounded-[8px] border border-white/[0.08] bg-white/[0.02] p-5">
+          <section className="rounded-[24px] bg-[#f1f0eb] p-5 text-[#0a0a0a]">
             <div className="flex items-center gap-3">
               <Image
                 src={profileAvatarUrl}
                 alt="ByuN0-0 profile"
                 width={48}
                 height={48}
-                className="size-12 rounded-full border border-white/[0.12] object-cover"
+                className="size-12 rounded-full border border-black/[0.1] object-cover"
               />
               <div>
-                <p className="text-[17px] font-medium">ByuN0-0</p>
-                <p className="text-[13px] text-[#8a8f98]">Portfolio Blog</p>
+                <p className="text-[18px] font-[540]">ByuN0-0</p>
+                <p className="font-mono text-[12px] uppercase tracking-[0.08em] text-[#555]">
+                  Portfolio Blog
+                </p>
               </div>
             </div>
-            <p className="mt-5 text-[14px] leading-[1.7] text-[#d0d6e0]">
+            <p className="mt-5 text-[16px] font-[330] leading-[1.45] tracking-[-0.14px] text-[#111]">
               백엔드 API, 관리자 도구, 배치, 결제, 크롤링, 배포까지 서비스
               운영에 필요한 기능을 연결해 온 개발자입니다.
             </p>
           </section>
 
-          <section className="rounded-[8px] border border-white/[0.08] bg-white/[0.02] p-5">
-            <h2 className="mb-4 flex items-center gap-2 text-[15px] font-medium">
-              <Layers3 className="size-4 text-[#7170ff]" />
+          <section className="rounded-[24px] border border-black/[0.1] bg-white p-5">
+            <h2 className="mb-4 flex items-center gap-2 text-[18px] font-[540]">
+              <Layers3 className="size-4" />
               카테고리
             </h2>
             <div className="space-y-3">
@@ -348,16 +350,16 @@ export default async function Home({
                 <Link
                   key={category.key}
                   href={category.href}
-                  className={`flex items-center justify-between rounded-[6px] px-2 py-1.5 text-[14px] transition ${
+                  className={`flex items-center justify-between rounded-full px-3 py-2 text-[14px] font-[480] transition ${
                     selectedCategory === category.key
-                      ? "bg-white/[0.06] text-white"
-                      : "text-[#d0d6e0] hover:bg-white/[0.04] hover:text-white"
+                      ? "bg-black text-white"
+                      : "text-[#0a0a0a] hover:bg-black/[0.06]"
                   }`}
                 >
                   <span>{category.name}</span>
                   <span
                     className={
-                      selectedCategory === category.key ? "text-[#a8b0ff]" : "text-[#62666d]"
+                      selectedCategory === category.key ? "text-white" : "text-[#555]"
                     }
                   >
                     {category.count}
@@ -367,12 +369,12 @@ export default async function Home({
             </div>
           </section>
 
-          <section className="rounded-[8px] border border-white/[0.08] bg-white/[0.02] p-5">
-            <h2 className="mb-4 flex items-center gap-2 text-[15px] font-medium">
-              <PenLine className="size-4 text-[#7170ff]" />
+          <section className="rounded-[24px] bg-[#ffe0d4] p-5">
+            <h2 className="mb-4 flex items-center gap-2 text-[18px] font-[540]">
+              <PenLine className="size-4" />
               주요 경험
             </h2>
-            <ul className="space-y-3 text-[14px] leading-[1.6] text-[#8a8f98]">
+            <ul className="space-y-3 text-[15px] font-[330] leading-[1.45] tracking-[-0.14px] text-[#0a0a0a]">
               <li>NestJS/Spring Boot 기반 API와 운영 도구 구현</li>
               <li>배치, 결제, 크롤링, 검색, 캐시 성능 개선</li>
               <li>제품 화면부터 인프라 배포까지 이어지는 문제 해결</li>
@@ -383,7 +385,7 @@ export default async function Home({
             href={githubProfileUrl}
             target="_blank"
             rel="noreferrer"
-            className="flex items-center justify-between rounded-[8px] border border-white/[0.08] bg-[#5e6ad2] px-5 py-4 text-[14px] font-medium text-white transition hover:bg-[#828fff]"
+            className="flex items-center justify-between rounded-full bg-black px-5 py-4 text-[15px] font-[480] text-white transition hover:bg-[#2a2a2a]"
           >
             GitHub 저장소
             <GitBranch className="size-4" />
