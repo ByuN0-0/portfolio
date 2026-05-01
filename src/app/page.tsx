@@ -58,6 +58,27 @@ function projectPostTitle(slug: string, title: string) {
   return title;
 }
 
+function projectHomeSummary(slug: string) {
+  const summaries: Record<string, string> = {
+    "blynx-insight-platform":
+      "야구 팬이 경기 결과와 선수 기록을 예측하고 리워드를 받는 스포츠 예측 플랫폼. 웹, 앱, 관리자 도구, 결제와 정산까지 연결된 실서비스.",
+    moonshot:
+      "웹사이트와 문서를 바탕으로 즉시 응답하는 AI 에이전트 플랫폼. 서비스 종료 이후에는 blynxlab.com을 회사 페이지 대용 홈페이지로 유지.",
+    rizzz:
+      "AI 캐릭터와 대화하며 관계를 쌓는 소셜 채팅 서비스. 2025년 11월 종료 전까지 채팅 백엔드, 관리자 도구, 데이터 수집 인프라를 개선.",
+    healthhola:
+      "건강 체험단 모집과 커뮤니티를 연결하려던 모바일 앱. 설문, 포인트, 쿠폰, 신고와 차단까지 포함한 건강 서비스 운영 흐름.",
+    "healthcatcher-web":
+      "헬스캐처 사업을 소개하던 공식 홈페이지. 브랜드 소개, 사업 영역, 팀 소개, 제휴 문의와 정책 문서를 한 곳에 모은 웹사이트.",
+    "crm-platform":
+      "회사와 거래 정보를 워크스페이스 단위로 관리하는 웹 CRM. 거래 속성을 자유롭게 추가할 수 있는 동적 필드 구조가 핵심.",
+    "weather-app-android":
+      "현재 날씨, 시간대별 예보, 5일 예보와 대기질 정보를 보여주는 Android 날씨 앱. 날씨와 시간대에 따라 바뀌는 화면 분위기.",
+  };
+
+  return summaries[slug] ?? "";
+}
+
 export default function Home() {
   return (
     <main className="min-h-screen bg-[#08090a] text-[#f7f8f8]">
@@ -117,8 +138,8 @@ export default function Home() {
                   >
                     {projectPostTitle(project.slug, project.title)}
                   </Link>
-                  <p className="mt-4 max-w-2xl text-[16px] leading-[1.7] text-[#d0d6e0]">
-                    {project.summary}
+                  <p className="mt-4 max-w-2xl overflow-hidden text-[16px] leading-[1.7] text-[#d0d6e0] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3]">
+                    {projectHomeSummary(project.slug)}
                   </p>
                   <div className="mt-6 flex flex-wrap gap-2">
                     {project.stacks.slice(0, 5).map((stack) => (
