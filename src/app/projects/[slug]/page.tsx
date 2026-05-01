@@ -471,16 +471,6 @@ function getStackReasons(slug: string): Record<string, string> {
       "AWS Lambda": "KBO/NPB/NamuWiki 크롤러를 서버리스 작업으로 배포하기 위해 사용했습니다.",
       Terraform: "크롤러 Lambda, S3, IAM, CloudWatch, EventBridge 리소스를 코드로 관리하기 위해 사용했습니다.",
     },
-    "blynx-company-web": {
-      "Next.js": "회사 홈페이지를 SSR/정적 페이지 기반으로 구성하고 메타데이터를 관리하기 위해 사용했습니다.",
-      React: "랜딩 페이지 섹션과 UI 요소를 컴포넌트 단위로 관리하기 위해 사용했습니다.",
-      TypeScript: "컴포넌트 props와 데이터 구조를 명확히 하며 리팩토링 안정성을 높이기 위해 사용했습니다.",
-      "Ant Design": "기존 회사 홈페이지 UI 요소와 빠르게 맞추기 위해 사용했습니다.",
-      "Framer Motion": "랜딩 페이지의 섹션 전환과 시각적 움직임을 구성하기 위해 사용했습니다.",
-      GSAP: "스크롤/모션 중심의 브랜드 표현을 더 세밀하게 조정하기 위해 사용했습니다.",
-      "next-intl": "한국어/영어 콘텐츠를 분리해 다국어 홈페이지로 운영하기 위해 사용했습니다.",
-      "Open Graph": "외부 공유 시 회사 페이지의 제목, 설명, 이미지를 제대로 노출하기 위해 사용했습니다.",
-    },
   };
 
   return reasons[slug] ?? {};

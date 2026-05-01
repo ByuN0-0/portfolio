@@ -12,9 +12,16 @@ import {
 
 import { projects } from "@/data/projects";
 
+function getLatestProjectDate(project: (typeof projects)[number]) {
+  return project.milestones.reduce(
+    (latest, milestone) => (milestone.date > latest ? milestone.date : latest),
+    "0000-00-00",
+  );
+}
+
 const homeProjects = [...projects].sort((a, b) => {
-  const latestA = a.milestones.at(-1)?.date ?? "0000-00-00";
-  const latestB = b.milestones.at(-1)?.date ?? "0000-00-00";
+  const latestA = getLatestProjectDate(a);
+  const latestB = getLatestProjectDate(b);
   return latestB.localeCompare(latestA);
 });
 const githubProfileUrl = "https://github.com/ByuN0-0";
@@ -31,7 +38,7 @@ const categories: [string, number][] = [
 const recentPosts = homeProjects.slice(0, 6).map((project) => ({
   title: projectPostTitle(project.slug, project.title),
   href: `/projects/${project.slug}`,
-  date: project.milestones.at(-1)?.date.replaceAll("-", ".") ?? project.period,
+  date: getLatestProjectDate(project).replaceAll("-", "."),
 }));
 
 const categoryLabel = {
@@ -45,10 +52,9 @@ function projectPostTitle(slug: string, title: string) {
   if (slug === "crm-platform") return `${title}: 동적 거래 속성을 가진 CRM 플랫폼`;
   if (slug === "healthhola") return `${title}: 건강 체험단 모바일 앱과 백엔드`;
   if (slug === "healthcatcher-web") return `${title}: 헬스캐처 공식 홈페이지`;
-  if (slug === "blynx-insight-platform") return `${title}: 예측 플랫폼 운영 시스템`;
+  if (slug === "blynx-insight-platform") return `${title}: 야구 예측 플랫폼 운영 시스템`;
   if (slug === "moonshot") return `${title}: LLM 챗봇 서비스 운영`;
-  if (slug === "rizzz") return `${title}: AI 소셜 플랫폼 운영 개선`;
-  if (slug === "blynx-company-web") return `${title}: 회사 홈페이지와 브랜드 웹`;
+  if (slug === "rizzz") return `${title}: 종료 전 AI 소셜 플랫폼 품질 개선`;
   return title;
 }
 
