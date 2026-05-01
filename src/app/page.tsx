@@ -7,7 +7,10 @@ import {
   FolderOpen,
   GitBranch,
   Layers3,
+  Mail,
   PenLine,
+  Rss,
+  UserRound,
 } from "lucide-react";
 
 import { projects } from "@/data/projects";
@@ -31,6 +34,9 @@ const sortedProjects = [...projects].sort((a, b) => {
   return latestB.localeCompare(latestA);
 });
 const githubProfileUrl = "https://github.com/ByuN0-0";
+const emailUrl = "mailto:devbyeon@gmail.com";
+const linkedInUrl = "https://www.linkedin.com/in/biyeon-hwang-854190376/";
+const blogUrl = "https://blog.biyeon.net";
 const profileAvatarUrl = "/profile/avatar.webp";
 const featuredProjectSlugs = ["blynx-insight-platform", "moonshot", "manjeom"];
 const featuredProjects = featuredProjectSlugs
@@ -153,7 +159,7 @@ export default async function Home({
                 ByuN0-0.log
               </Link>
               <p className="mt-3 max-w-xl text-[18px] font-[330] leading-[1.45] tracking-[-0.14px] text-[#111]">
-                서비스 운영과 제품 구현 경험을 글처럼 쌓아두는 개발 포트폴리오
+                백엔드 API, 운영 도구, 배치, 결제, 크롤링, 배포까지 제품 흐름을 연결하는 개발자
               </p>
             </div>
             <nav className="flex flex-wrap gap-2 text-[15px] font-[480] text-[#0a0a0a]">
@@ -162,6 +168,9 @@ export default async function Home({
               </a>
               <a href="#profile" className="rounded-full px-4 py-2 hover:bg-black hover:text-white">
                 프로필
+              </a>
+              <a href={blogUrl} target="_blank" rel="noreferrer" className="rounded-full px-4 py-2 hover:bg-black hover:text-white">
+                블로그
               </a>
               <a
                 href={githubProfileUrl}
@@ -333,7 +342,7 @@ export default async function Home({
           </section>
         </section>
 
-        <aside id="profile" className="space-y-5 lg:sticky lg:top-6 lg:self-start">
+        <aside id="profile" className="space-y-5 lg:self-start">
           <section className="rounded-[24px] bg-[#f1f0eb] p-5 text-[#0a0a0a]">
             <div className="flex items-center gap-3">
               <Image
@@ -350,23 +359,22 @@ export default async function Home({
                 </p>
               </div>
             </div>
-            <p className="mt-5 text-[16px] font-[330] leading-[1.45] tracking-[-0.14px] text-[#111]">
-              백엔드 API, 관리자 도구, 배치, 결제, 크롤링, 배포까지 서비스
-              운영에 필요한 기능을 연결해 온 개발자입니다.
+            <p className="mt-4 text-[15px] font-[330] leading-[1.45] tracking-[-0.14px] text-[#111]">
+              백엔드 API, 관리자 도구, 배치, 결제, 크롤링, 배포까지 제품 흐름을 연결합니다.
             </p>
           </section>
 
-          <section className="rounded-[24px] border border-black/[0.1] bg-white p-5">
-            <h2 className="mb-4 flex items-center gap-2 text-[18px] font-[540]">
+          <section className="rounded-[24px] border border-black/[0.1] bg-white p-4">
+            <h2 className="mb-3 flex items-center gap-2 text-[17px] font-[540]">
               <Layers3 className="size-4" />
               카테고리
             </h2>
-            <div className="space-y-3">
+            <div className="space-y-1.5">
               {categories.map((category) => (
                 <Link
                   key={category.key}
                   href={category.href}
-                  className={`flex items-center justify-between rounded-full px-3 py-2 text-[14px] font-[480] transition ${
+                  className={`flex items-center justify-between rounded-full px-3 py-1.5 text-[13px] font-[480] transition ${
                     selectedCategory === category.key
                       ? "bg-black text-white"
                       : "text-[#0a0a0a] hover:bg-black/[0.06]"
@@ -385,29 +393,132 @@ export default async function Home({
             </div>
           </section>
 
-          <section className="rounded-[24px] bg-[#ffe0d4] p-5">
-            <h2 className="mb-4 flex items-center gap-2 text-[18px] font-[540]">
+          <section className="rounded-[24px] bg-[#ffe0d4] p-4">
+            <h2 className="mb-3 flex items-center gap-2 text-[17px] font-[540]">
               <PenLine className="size-4" />
               주요 경험
             </h2>
-            <ul className="space-y-3 text-[15px] font-[330] leading-[1.45] tracking-[-0.14px] text-[#0a0a0a]">
+            <ul className="space-y-2 text-[14px] font-[330] leading-[1.45] tracking-[-0.14px] text-[#0a0a0a]">
               <li>NestJS/Spring Boot 기반 API와 운영 도구 구현</li>
               <li>배치, 결제, 크롤링, 검색, 캐시 성능 개선</li>
               <li>제품 화면부터 인프라 배포까지 이어지는 문제 해결</li>
             </ul>
           </section>
 
-          <a
-            href={githubProfileUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="flex items-center justify-between rounded-full bg-black px-5 py-4 text-[15px] font-[480] text-white transition hover:bg-[#2a2a2a]"
-          >
-            GitHub 저장소
-            <GitBranch className="size-4" />
-          </a>
+          <section className="rounded-[24px] border border-black/[0.1] bg-white p-4">
+            <h2 className="mb-3 text-[17px] font-[540]">연락</h2>
+            <div className="space-y-2">
+              {[
+                ["GitHub", "ByuN0-0", githubProfileUrl, GitBranch],
+                ["Email", "devbyeon@gmail.com", emailUrl, Mail],
+                ["LinkedIn", "biyeon-hwang", linkedInUrl, UserRound],
+                ["Blog", "blog.biyeon.net", blogUrl, Rss],
+              ].map(([label, value, href, Icon]) => (
+                <a
+                  key={label as string}
+                  href={href as string}
+                  target={label === "Email" ? undefined : "_blank"}
+                  rel={label === "Email" ? undefined : "noreferrer"}
+                  className={`flex items-center justify-between rounded-full px-3 py-2 text-[14px] font-[480] transition ${
+                    label === "GitHub"
+                      ? "bg-black text-white hover:bg-[#2a2a2a]"
+                      : "hover:bg-black/[0.06]"
+                  }`}
+                >
+                  <span className="inline-flex min-w-0 items-center gap-2">
+                    <Icon className="size-4 shrink-0" />
+                    <span>{label as string}</span>
+                  </span>
+                  <span
+                    className={`truncate pl-3 ${
+                      label === "GitHub" ? "text-white" : "text-[#555]"
+                    }`}
+                  >
+                    {value as string}
+                  </span>
+                </a>
+              ))}
+            </div>
+          </section>
         </aside>
       </div>
+
+      <footer className="border-t border-black/[0.08] bg-[#fffdf8]">
+        <div className="mx-auto grid max-w-7xl gap-10 px-5 py-12 sm:px-8 lg:grid-cols-[minmax(0,1.2fr)_repeat(3,minmax(0,1fr))]">
+          <div>
+            <Link href="/" className="text-[42px] font-[340] leading-none tracking-[-0.96px]">
+              ByuN0-0.log
+            </Link>
+            <p className="mt-4 max-w-md text-[16px] font-[330] leading-[1.45] tracking-[-0.14px] text-[#333]">
+              서비스 운영과 제품 구현 과정에서 남긴 프로젝트 기록을 모아둔 포트폴리오입니다.
+            </p>
+          </div>
+
+          <FooterColumn
+            title="Projects"
+            links={[
+              ["회사 프로젝트", "/?category=company"],
+              ["사업 프로젝트", "/?category=business"],
+              ["개인 프로젝트", "/?category=personal"],
+              ["Prototype", "/?category=prototype"],
+            ]}
+          />
+          <FooterColumn
+            title="Contact"
+            links={[
+              ["Email", emailUrl],
+              ["LinkedIn", linkedInUrl],
+              ["Blog", blogUrl],
+              ["GitHub", githubProfileUrl],
+            ]}
+          />
+          <div>
+            <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-[#555]">
+              Focus
+            </p>
+            <ul className="mt-4 space-y-2 text-[15px] font-[330] leading-[1.45] tracking-[-0.14px] text-[#333]">
+              <li>Backend API</li>
+              <li>Admin Tools</li>
+              <li>Batch & Payment</li>
+              <li>Infra & Deployment</li>
+            </ul>
+          </div>
+        </div>
+      </footer>
     </main>
+  );
+}
+
+function FooterColumn({
+  title,
+  links,
+}: {
+  title: string;
+  links: [string, string][];
+}) {
+  return (
+    <div>
+      <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-[#555]">
+        {title}
+      </p>
+      <ul className="mt-4 space-y-2 text-[15px] font-[480] leading-[1.4]">
+        {links.map(([label, href]) => {
+          const isExternal = href.startsWith("http") || href.startsWith("mailto:");
+
+          return (
+            <li key={label}>
+              <a
+                href={href}
+                target={isExternal && !href.startsWith("mailto:") ? "_blank" : undefined}
+                rel={isExternal && !href.startsWith("mailto:") ? "noreferrer" : undefined}
+                className="rounded-full py-1 text-[#0a0a0a] hover:underline"
+              >
+                {label}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
   );
 }
