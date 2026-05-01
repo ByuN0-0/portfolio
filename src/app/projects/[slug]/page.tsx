@@ -73,6 +73,33 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     if (isManjeom) return `${project.title}: 웹 기반 점자 학습 서비스 만들기`;
     return project.title;
   })();
+  const headerSummary = (() => {
+    if (project.slug === "blynx-insight-platform") {
+      return "실제 운영 중인 야구 예측 플랫폼. 예측 API, 관리자 도구, 결제 검증, 정산 배치, Terraform 인프라 개선을 맡았습니다.";
+    }
+    if (project.slug === "moonshot") {
+      return "BlynxLab으로 운영했던 AI 서비스. LLM 스트리밍 백엔드, 문의 폼, 문서 검색, 배포 스크립트, 서비스 종료 전환까지 다뤘습니다.";
+    }
+    if (project.slug === "rizzz") {
+      return "AI 소셜/채팅 서비스 종료 전 품질 개선 작업. 채팅 백엔드, 관리자 화면, 크롤러 인프라, 권한 보안 문제를 정리했습니다.";
+    }
+    if (isHealthHola) {
+      return "헬스캐처 사업에서 운영을 목표로 만든 건강 체험단 앱과 백엔드. 인증, 커뮤니티, 체험단, 설문, 쿠폰, 신고/차단 흐름을 연결했습니다.";
+    }
+    if (isHealthCatcherWeb) {
+      return "헬스캐처 사업을 소개하던 공식 홈페이지. 브랜드 소개, 사업 영역, 제휴 문의, 정책 문서를 한 흐름으로 구성했습니다.";
+    }
+    if (isManjeom) {
+      return "웹 기반 점자 학습 서비스. 점자표, 6점 입력, 선택형/입력형 연습, 한글 점자 변환기를 하나의 학습 흐름으로 묶었습니다.";
+    }
+    if (isCrmProject) {
+      return "워크스페이스별 동적 거래 속성을 다루는 CRM 플랫폼. EAV 모델과 AG Grid 편집 UI를 연결했습니다.";
+    }
+    if (isWeatherProject) {
+      return "OpenWeatherMap API를 연결한 첫 Android 날씨 앱. 현재 날씨, 시간대별 예보, 5일 예보, 대기질 정보를 한 화면에 정리했습니다.";
+    }
+    return project.summary;
+  })();
   const overviewText = (() => {
     if (isWeatherProject) {
       return `${project.subtitle} 현재 날씨, 시간대별 예보, 5일 예보, 대기질 정보를 한 화면에서 확인할 수 있도록 구성한 첫 모바일 프로젝트입니다. 위치 권한, 외부 API 응답, 날씨별 시각 효과를 직접 연결하며 Android 앱의 기본 흐름을 익혔습니다.`;
@@ -172,7 +199,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               {postTitle}
             </h1>
             <p className="mt-5 max-w-3xl text-[17px] leading-[1.75] text-[#d0d6e0]">
-              {project.summary}
+              {headerSummary}
             </p>
           </div>
 

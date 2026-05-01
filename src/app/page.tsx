@@ -32,6 +32,10 @@ const sortedProjects = [...projects].sort((a, b) => {
 });
 const githubProfileUrl = "https://github.com/ByuN0-0";
 const profileAvatarUrl = "/profile/avatar.webp";
+const featuredProjectSlugs = ["blynx-insight-platform", "moonshot", "manjeom"];
+const featuredProjects = featuredProjectSlugs
+  .map((slug) => projects.find((project) => project.slug === slug))
+  .filter((project): project is (typeof projects)[number] => Boolean(project));
 
 const filterablePrototypeSlugs = ["weather-app-android", "crm-platform"];
 const categories: { key: HomeCategory; name: string; count: number; href: string }[] = [
@@ -131,6 +135,7 @@ export default async function Home({
 }) {
   const selectedCategory = getSelectedCategory(await searchParams);
   const homeProjects = filterProjects(selectedCategory);
+  const showFeaturedProjects = selectedCategory === "all";
   const recentPosts = homeProjects.slice(0, 6).map((project) => ({
     title: projectPostTitle(project.slug, project.title),
     href: `/projects/${project.slug}`,
@@ -172,6 +177,55 @@ export default async function Home({
 
       <div className="mx-auto grid max-w-6xl gap-8 px-5 py-8 lg:grid-cols-[minmax(0,1fr)_300px]">
         <section id="posts" className="space-y-8">
+          {showFeaturedProjects ? (
+            <section className="rounded-[8px] border border-white/[0.08] bg-white/[0.02]">
+              <div className="border-b border-white/[0.06] px-6 py-5 sm:px-8">
+                <p className="text-[13px] font-medium uppercase tracking-[0.08em] text-[#7170ff]">
+                  Featured
+                </p>
+                <h2 className="mt-2 text-[24px] font-normal tracking-[-0.288px]">
+                  대표 프로젝트
+                </h2>
+                <p className="mt-2 max-w-2xl text-[14px] leading-[1.7] text-[#8a8f98]">
+                  실서비스 운영, AI 제품 개발, 개인 서비스 구현 경험이 가장 잘 드러나는 작업입니다.
+                </p>
+              </div>
+              <div className="grid divide-y divide-white/[0.06] lg:grid-cols-3 lg:divide-x lg:divide-y-0">
+                {featuredProjects.map((project, index) => (
+                  <Link
+                    key={project.slug}
+                    href={`/projects/${project.slug}`}
+                    className="group block p-5 transition hover:bg-white/[0.03] sm:p-6"
+                  >
+                    <div className="relative mb-5 aspect-[16/10] overflow-hidden rounded-[8px] border border-white/[0.08] bg-[#0f1011]">
+                      <Image
+                        src={project.heroImage}
+                        alt={`${project.title} featured preview`}
+                        fill
+                        sizes="(max-width: 1024px) 100vw, 260px"
+                        priority={index === 0}
+                        className="object-contain p-3 opacity-90 transition group-hover:scale-[1.02]"
+                      />
+                    </div>
+                    <div className="mb-3 flex flex-wrap items-center gap-2 text-[12px] text-[#8a8f98]">
+                      <span className="inline-flex items-center gap-1.5">
+                        <FolderOpen className="size-3.5 text-[#7170ff]" />
+                        {categoryLabel[project.category]}
+                      </span>
+                      <span>{project.period}</span>
+                    </div>
+                    <h3 className="text-[21px] font-normal leading-[1.25] tracking-[-0.288px] group-hover:text-[#d0d6e0]">
+                      {projectPostTitle(project.slug, project.title)}
+                    </h3>
+                    <p className="mt-3 overflow-hidden text-[14px] leading-[1.65] text-[#8a8f98] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3]">
+                      {projectHomeSummary(project.slug)}
+                    </p>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          ) : null}
+
           {homeProjects.map((project, index) => (
             <article
               key={project.slug}
@@ -279,8 +333,8 @@ export default async function Home({
               </div>
             </div>
             <p className="mt-5 text-[14px] leading-[1.7] text-[#d0d6e0]">
-              백엔드, 프론트엔드, 인프라를 오가며 실제 서비스에 필요한 기능을
-              끝까지 연결해 온 개발자입니다.
+              백엔드 API, 관리자 도구, 배치, 결제, 크롤링, 배포까지 서비스
+              운영에 필요한 기능을 연결해 온 개발자입니다.
             </p>
           </section>
 
@@ -319,9 +373,9 @@ export default async function Home({
               주요 경험
             </h2>
             <ul className="space-y-3 text-[14px] leading-[1.6] text-[#8a8f98]">
-              <li>서비스 기능 설계와 API 구현</li>
-              <li>관리자 도구와 사용자 화면 개발</li>
-              <li>배포, 결제, 배치, 크롤링 운영 경험</li>
+              <li>NestJS/Spring Boot 기반 API와 운영 도구 구현</li>
+              <li>배치, 결제, 크롤링, 검색, 캐시 성능 개선</li>
+              <li>제품 화면부터 인프라 배포까지 이어지는 문제 해결</li>
             </ul>
           </section>
 
