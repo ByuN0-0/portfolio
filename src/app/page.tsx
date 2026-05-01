@@ -21,14 +21,27 @@ const weatherProject = projects.find((project) => project.slug === "weather-app-
 const githubProfileUrl = "https://github.com/ByuN0-0";
 
 const categories = [
+  ["Business", 2],
+  ["Mobile App", 1],
+  ["Vue", 1],
   ["Android", 1],
   ["CRM", 1],
-  ["Prototype", 1],
+  ["Prototype", 2],
   ["API Integration", 2],
-  ["Retrospective", 2],
+  ["Retrospective", 4],
 ];
 
 const recentPosts = [
+  {
+    title: "HealthHola: 사업 프로젝트에서 앱과 백엔드를 함께 만들기",
+    href: "/projects/healthhola",
+    date: "2025.02.17",
+  },
+  {
+    title: "HealthCatcher Web: 브랜드 홈페이지와 사업 소개 채널 만들기",
+    href: "/projects/healthcatcher-web",
+    date: "2025.01.14",
+  },
   {
     title: "CRM Platform: 동적 거래 속성을 가진 CRM 플랫폼 만들기",
     href: "/projects/crm-platform",
@@ -50,6 +63,14 @@ const recentPosts = [
     date: "2023.06.05",
   },
 ];
+
+function projectPostTitle(slug: string, title: string) {
+  if (slug === "weather-app-android") return `${title}: GPS 기반 Android 날씨 앱`;
+  if (slug === "crm-platform") return `${title}: 동적 거래 속성을 가진 CRM 플랫폼`;
+  if (slug === "healthhola") return `${title}: 건강 체험단 모바일 앱과 백엔드`;
+  if (slug === "healthcatcher-web") return `${title}: 헬스캐처 공식 홈페이지`;
+  return title;
+}
 
 export default function Home() {
   return (
@@ -108,9 +129,7 @@ export default function Home() {
                     href={`/projects/${project.slug}`}
                     className="block text-[32px] font-normal leading-[1.18] tracking-[-0.704px] hover:text-[#d0d6e0]"
                   >
-                    {project.slug === "weather-app-android"
-                      ? `${project.title}: GPS 기반 Android 날씨 앱`
-                      : `${project.title}: 동적 거래 속성을 가진 CRM 플랫폼`}
+                    {projectPostTitle(project.slug, project.title)}
                   </Link>
                   <p className="mt-4 max-w-2xl text-[16px] leading-[1.7] text-[#d0d6e0]">
                     {project.summary}
@@ -137,13 +156,19 @@ export default function Home() {
                   href={`/projects/${project.slug}`}
                   className="relative flex min-h-[260px] items-center justify-center border-t border-white/[0.06] bg-[#0f1011] p-5 md:border-l md:border-t-0"
                 >
-                  <Image
-                    src={project.heroImage}
-                    alt={`${project.title} preview`}
-                    width={720}
-                    height={1280}
-                    className="h-[260px] w-auto max-w-full rounded-[8px] object-contain opacity-90"
-                  />
+                  <div className="overflow-hidden rounded-[10px] border border-white/[0.08] bg-black/20">
+                    <Image
+                      src={project.heroImage}
+                      alt={`${project.title} preview`}
+                      width={720}
+                      height={1280}
+                      className={
+                        project.slug === "healthcatcher-web"
+                          ? "h-auto w-full object-contain opacity-90"
+                          : "h-[260px] w-auto max-w-full object-contain opacity-90"
+                      }
+                    />
+                  </div>
                 </Link>
               </div>
             </article>

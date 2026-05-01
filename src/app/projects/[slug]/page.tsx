@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -5,6 +6,7 @@ import {
   BookOpen,
   CalendarDays,
   CheckCircle2,
+  ExternalLink,
   GitBranch,
   Layers3,
 } from "lucide-react";
@@ -51,18 +53,61 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
   const isWeatherProject = project.slug === "weather-app-android";
   const isCrmProject = project.slug === "crm-platform";
-  const postTitle = isWeatherProject
-    ? `${project.title}: 첫 Android 프로젝트를 다시 읽기`
-    : `${project.title}: 동적 거래 속성을 가진 CRM 플랫폼 만들기`;
-  const overviewText = isWeatherProject
-    ? `${project.subtitle} 원본 저장소의 README, Gradle 의존성, Java 소스 구조, Git 로그를 기준으로 첫 번째 포트폴리오 글을 구성했습니다. 완성 화면을 보여주는 데서 끝내지 않고, 어떤 기능을 어떤 순서로 붙여 갔는지 읽히도록 정리했습니다.`
-    : `${project.subtitle} 원본 저장소의 README, Spring Boot 컨트롤러/서비스, Next.js 화면, Git 로그를 기준으로 두 번째 포트폴리오 글을 구성했습니다. 거래 속성을 동적으로 다루는 구조와 프론트엔드 그리드 연동 과정을 중심으로 정리했습니다.`;
-  const stackText = isWeatherProject
-    ? "기술 스택은 README와 `app/build.gradle`의 의존성을 기준으로 정리했습니다. Android Java 앱 위에 Retrofit2, Gson, OpenWeatherMap API, Glide, WeatherView를 조합했습니다."
-    : "기술 스택은 Spring Boot 백엔드와 Next.js 프론트엔드 구성을 기준으로 정리했습니다. 인증은 Spring Security/JWT, 데이터 모델은 JPA/MySQL, 프론트엔드는 Ant Design과 AG Grid를 사용했습니다.";
-  const structureText = isWeatherProject
-    ? "초반에는 `MainActivity` 중심으로 기능이 모였지만, 후반 커밋으로 갈수록 API 호출과 화면 초기화 책임이 분리됩니다. 첫 프로젝트답게 투박한 흔적도 있지만, 그만큼 구조화의 필요성을 배운 기록이 남아 있습니다."
-    : "이 프로젝트에서 가장 크게 배운 것은 EAV 모델의 활용입니다. 거래 테이블의 컬럼을 고정하지 않고 DealAttribute와 DealValue를 분리해, 워크스페이스마다 다른 거래 속성을 만들 수 있게 했습니다. 프론트엔드에서는 이 동적 속성을 그리드 컬럼으로 렌더링했습니다.";
+  const isHealthCatcherWeb = project.slug === "healthcatcher-web";
+  const isHealthHola = project.slug === "healthhola";
+  const statusLabel = project.status === "archived" ? "사업 정리" : "완료";
+  const postTitle = (() => {
+    if (isWeatherProject) return `${project.title}: 첫 Android 프로젝트를 다시 읽기`;
+    if (isCrmProject) return `${project.title}: 동적 거래 속성을 가진 CRM 플랫폼 만들기`;
+    if (isHealthHola) return `${project.title}: 사업 프로젝트에서 앱과 백엔드를 함께 만들기`;
+    if (isHealthCatcherWeb) return `${project.title}: 헬스캐처 공식 홈페이지 만들기`;
+    return project.title;
+  })();
+  const overviewText = (() => {
+    if (isWeatherProject) {
+      return `${project.subtitle} 원본 저장소의 README, Gradle 의존성, Java 소스 구조, Git 로그를 기준으로 첫 번째 포트폴리오 글을 구성했습니다. 완성 화면을 보여주는 데서 끝내지 않고, 어떤 기능을 어떤 순서로 붙여 갔는지 읽히도록 정리했습니다.`;
+    }
+    if (isCrmProject) {
+      return `${project.subtitle} 원본 저장소의 README, Spring Boot 컨트롤러/서비스, Next.js 화면, Git 로그를 기준으로 두 번째 포트폴리오 글을 구성했습니다. 거래 속성을 동적으로 다루는 구조와 프론트엔드 그리드 연동 과정을 중심으로 정리했습니다.`;
+    }
+    if (isHealthHola) {
+      return `${project.subtitle} 비공개 모바일 앱 저장소와 공개 백엔드 저장소의 Git 기록을 기준으로 정리했습니다. 2025년 2월 사업 정리로 앱은 현재 운영되지 않지만, 실제 서비스 운영을 목표로 구현했던 체험단, 커뮤니티, 설문, 포인트, 쿠폰, 신고와 차단 흐름을 기록합니다.`;
+    }
+    if (isHealthCatcherWeb) {
+      return `${project.subtitle} 배포된 홈페이지와 Vue/Vite 저장소의 컴포넌트 구조, 이미지 자산, Git 기록을 기준으로 정리했습니다. 사업 소개 채널로서 브랜드 첫 화면, 사업 영역, 팀 소개, 제휴 문의, 정책 문서까지 갖춘 프로젝트입니다.`;
+    }
+    return project.summary;
+  })();
+  const stackText = (() => {
+    if (isWeatherProject) {
+      return "기술 스택은 README와 `app/build.gradle`의 의존성을 기준으로 정리했습니다. Android Java 앱 위에 Retrofit2, Gson, OpenWeatherMap API, Glide, WeatherView를 조합했습니다.";
+    }
+    if (isCrmProject) {
+      return "기술 스택은 Spring Boot 백엔드와 Next.js 프론트엔드 구성을 기준으로 정리했습니다. 인증은 Spring Security/JWT, 데이터 모델은 JPA/MySQL, 프론트엔드는 Ant Design과 AG Grid를 사용했습니다.";
+    }
+    if (isHealthHola) {
+      return "모바일 앱은 Expo, React Native, Expo Router, Redux Toolkit, Axios로 구성했고, 백엔드는 Spring Boot, Spring Security, JWT/OAuth2, PostgreSQL, Redis, AWS S3를 사용했습니다.";
+    }
+    if (isHealthCatcherWeb) {
+      return "홈페이지는 Vue 3, Vite, Vue Router, Pinia, Tailwind CSS 기반으로 구성했고, Vercel 정적 배포에 맞춰 페이지와 섹션 컴포넌트를 나눴습니다.";
+    }
+    return "프로젝트 저장소와 설정 파일을 기준으로 기술 스택을 정리했습니다.";
+  })();
+  const structureText = (() => {
+    if (isWeatherProject) {
+      return "초반에는 `MainActivity` 중심으로 기능이 모였지만, 후반 커밋으로 갈수록 API 호출과 화면 초기화 책임이 분리됩니다. 첫 프로젝트답게 투박한 흔적도 있지만, 그만큼 구조화의 필요성을 배운 기록이 남아 있습니다.";
+    }
+    if (isCrmProject) {
+      return "이 프로젝트에서 가장 크게 배운 것은 EAV 모델의 활용입니다. 거래 테이블의 컬럼을 고정하지 않고 DealAttribute와 DealValue를 분리해, 워크스페이스마다 다른 거래 속성을 만들 수 있게 했습니다. 프론트엔드에서는 이 동적 속성을 그리드 컬럼으로 렌더링했습니다.";
+    }
+    if (isHealthHola) {
+      return "앱은 Expo Router 기반 화면과 Redux slice를 도메인별로 나누고, 백엔드는 인증/커뮤니티/체험단/설문/쿠폰/신고 도메인을 컨트롤러와 서비스로 분리했습니다. 실제 운영을 위해 토큰 재발급, 신고, 차단, 파일 업로드 같은 흐름도 함께 다뤘습니다.";
+    }
+    if (isHealthCatcherWeb) {
+      return "홈페이지는 페이지 라우트보다 섹션 컴포넌트가 핵심입니다. Home, About, Business, Community, Contact, Policy 페이지 안에서 브랜드 소개와 사업 콘텐츠를 재사용 가능한 섹션 단위로 나누었습니다.";
+    }
+    return project.architecture.join(" ");
+  })();
 
   return (
     <main className="min-h-screen bg-[#08090a] text-[#f7f8f8]">
@@ -119,7 +164,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 {[
                   ["역할", project.role],
                   ["형태", project.team],
-                  ["상태", "완료"],
+                  ["상태", statusLabel],
                 ].map(([label, value]) => (
                   <div
                     key={label}
@@ -151,6 +196,41 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 </div>
                 <div className="-mx-6 border-y border-white/[0.06] bg-[#0f1011] sm:-mx-9">
                   {isWeatherProject ? <WeatherPhone /> : <CrmPrototype />}
+                </div>
+              </section>
+            ) : null}
+
+            {isHealthCatcherWeb ? (
+              <section id="visual" className="scroll-mt-20">
+                <div className="mb-5">
+                  <p className="text-[13px] font-medium uppercase text-[#7170ff]">
+                    Main Screen
+                  </p>
+                  <h2 className="mt-2 text-[28px] font-normal tracking-[-0.288px]">
+                    홈페이지 메인 화면
+                  </h2>
+                  <p className="mt-3 text-[16px] leading-[1.75] text-[#8a8f98]">
+                    배포된 헬스캐처 홈페이지의 첫 화면 구성을 포트폴리오 안에서 다시 보여줍니다.
+                  </p>
+                </div>
+                <div className="overflow-hidden rounded-[8px] border border-white/[0.08] bg-[#0f1011]">
+                  <div className="flex items-center gap-2 border-b border-white/[0.06] px-4 py-3">
+                    <span className="size-2.5 rounded-full bg-[#ef4444]" />
+                    <span className="size-2.5 rounded-full bg-[#f59e0b]" />
+                    <span className="size-2.5 rounded-full bg-[#10b981]" />
+                    <span className="ml-3 text-[12px] text-[#8a8f98]">
+                      healthcatcher-web.vercel.app
+                    </span>
+                  </div>
+                  <div className="relative aspect-[48/25] min-h-[260px] overflow-hidden bg-black">
+                    <Image
+                      src={project.heroImage}
+                      alt={`${project.title} main screen`}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 760px"
+                      className="object-contain"
+                    />
+                  </div>
                 </div>
               </section>
             ) : null}
@@ -217,12 +297,14 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             <nav className="space-y-3 text-[14px] text-[#d0d6e0]">
               {[
                 ["소개", "#overview"],
-                ["프로토타입", "#prototype"],
+                [isHealthCatcherWeb ? "메인 화면" : "프로토타입", isHealthCatcherWeb ? "#visual" : "#prototype"],
                 ["기능", "#features"],
                 ["기술", "#stack"],
                 ["구조", "#structure"],
                 ["회고", "#retrospective"],
-              ].map(([label, href]) => (
+              ]
+                .filter(([, href]) => href !== "#prototype" || isWeatherProject || isCrmProject)
+                .map(([label, href]) => (
                 <a key={href} href={href} className="block hover:text-white">
                   {label}
                 </a>
@@ -239,6 +321,18 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             저장소 보기
             <GitBranch className="size-4" />
           </a>
+
+          {project.liveUrl ? (
+            <a
+              href={project.liveUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center justify-between rounded-[8px] border border-white/[0.08] bg-white/[0.02] px-5 py-4 text-[14px] font-medium text-[#d0d6e0] transition hover:bg-white/[0.05] hover:text-white"
+            >
+              배포 사이트
+              <ExternalLink className="size-4" />
+            </a>
+          ) : null}
         </aside>
       </div>
     </main>
