@@ -275,25 +275,25 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
             <PostSection id="stack" title="사용 기술">
               <p>{stackText}</p>
-              <div className="mt-7 space-y-9">
+              <div className="mt-5 space-y-6">
                 {stackSections.map((section) => (
                   <section key={section.label}>
-                    <h3 className="mb-4 text-[19px] font-medium leading-[1.5] text-[#f7f8f8]">
+                    <h3 className="mb-3 text-[18px] font-medium leading-[1.45] text-[#f7f8f8]">
                       {section.label}
                     </h3>
-                    <div className="space-y-6">
+                    <div className="space-y-4">
                       {section.groups.map((group) => (
                         <div key={`${section.label}-${group.label}`}>
-                          <p className="mb-3 text-[13px] font-medium uppercase tracking-[0.08em] text-[#7170ff]">
+                          <p className="mb-2 text-[12px] font-medium uppercase tracking-[0.08em] text-[#7170ff]">
                             {group.label}
                           </p>
-                          <div className="space-y-4">
+                          <div className="space-y-3">
                             {group.stacks.map((stack) => (
                               <div key={stack}>
-                                <p className="text-[16px] font-medium leading-[1.5] text-[#f7f8f8]">
+                                <p className="text-[15px] font-medium leading-[1.45] text-[#f7f8f8]">
                                   {stack}
                                 </p>
-                                <p className="mt-1 text-[15px] leading-[1.75] text-[#8a8f98]">
+                                <p className="mt-0.5 text-[14px] leading-[1.65] text-[#8a8f98]">
                                   {stackReasons[stack] ??
                                     "프로젝트 요구사항과 기존 구조에 맞춰 사용했습니다."}
                                 </p>
