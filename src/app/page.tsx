@@ -180,7 +180,7 @@ export default async function Home({
         <section id="posts" className="space-y-8">
           {showFeaturedProjects ? (
             <section className="overflow-hidden rounded-[24px] bg-[#e6f5a6] text-[#0a0a0a]">
-              <div className="px-6 py-8 sm:px-10 sm:py-10">
+              <div className="p-6">
                 <p className="font-mono text-[12px] font-normal uppercase tracking-[0.12em]">
                   Featured
                 </p>
@@ -196,7 +196,7 @@ export default async function Home({
                   <Link
                     key={project.slug}
                     href={`/projects/${project.slug}`}
-                    className="group block bg-[#e6f5a6] p-5 transition hover:bg-[#deee98] sm:p-6"
+                    className="group block bg-[#e6f5a6] p-6 transition hover:bg-[#deee98]"
                   >
                     <div className="relative mb-5 aspect-[16/10] overflow-hidden rounded-[16px] bg-white">
                       <Image
@@ -216,14 +216,14 @@ export default async function Home({
                       <span>{project.period}</span>
                     </div>
                     <h3>
-                      <span className="block text-[24px] font-[540] leading-[1.15] tracking-[-0.26px]">
+                      <span className="block text-[28px] font-[540] leading-[1.08] tracking-[-0.52px]">
                         {project.title}
                       </span>
-                      <span className="mt-1.5 block text-[17px] font-[330] leading-[1.35] tracking-[-0.14px]">
+                      <span className="mt-2 block text-[16px] font-[480] leading-[1.35] tracking-[-0.14px] text-[#0a0a0a]">
                         {projectPostDescription(project.slug)}
                       </span>
                     </h3>
-                    <p className="mt-3 overflow-hidden text-[15px] font-[330] leading-[1.45] tracking-[-0.14px] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3]">
+                    <p className="mt-3 overflow-hidden text-[14px] font-[330] leading-[1.5] tracking-[-0.14px] text-[#333] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3]">
                       {projectHomeSummary(project.slug)}
                     </p>
                   </Link>
@@ -256,11 +256,11 @@ export default async function Home({
                     <span className="block text-[38px] font-[340] leading-[1.05] tracking-[-0.96px]">
                       {project.title}
                     </span>
-                    <span className="mt-2 block text-[24px] font-[330] leading-[1.22] tracking-[-0.26px]">
+                    <span className="mt-2 block text-[22px] font-[480] leading-[1.25] tracking-[-0.26px] text-[#0a0a0a]">
                       {projectPostDescription(project.slug)}
                     </span>
                   </Link>
-                  <p className="mt-4 max-w-2xl overflow-hidden text-[18px] font-[330] leading-[1.45] tracking-[-0.14px] text-[#111] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3]">
+                  <p className="mt-4 max-w-2xl overflow-hidden text-[17px] font-[330] leading-[1.5] tracking-[-0.14px] text-[#333] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3]">
                     {projectHomeSummary(project.slug)}
                   </p>
                   <div className="mt-6 flex flex-wrap gap-2">
@@ -323,7 +323,7 @@ export default async function Home({
                     <span className="block text-[18px] font-[540] leading-[1.25] tracking-[-0.26px]">
                       {post.title}
                     </span>
-                    <span className="mt-1 block text-[15px] font-[330] leading-[1.35] tracking-[-0.14px]">
+                    <span className="mt-1 block text-[15px] font-[480] leading-[1.35] tracking-[-0.14px] text-[#333]">
                       {post.description}
                     </span>
                   </span>
