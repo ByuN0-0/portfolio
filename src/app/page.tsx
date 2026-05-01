@@ -1,65 +1,233 @@
 import Image from "next/image";
+import Link from "next/link";
+import {
+  ArrowRight,
+  BookOpen,
+  CalendarDays,
+  FolderOpen,
+  GitBranch,
+  Layers3,
+  PenLine,
+} from "lucide-react";
+
+import { projects } from "@/data/projects";
+
+const homeProjects = [...projects].sort((a, b) => {
+  const latestA = a.milestones.at(-1)?.date ?? "0000-00-00";
+  const latestB = b.milestones.at(-1)?.date ?? "0000-00-00";
+  return latestB.localeCompare(latestA);
+});
+const weatherProject = projects.find((project) => project.slug === "weather-app-android") ?? projects[0];
+const githubProfileUrl = "https://github.com/ByuN0-0";
+
+const categories = [
+  ["Android", 1],
+  ["CRM", 1],
+  ["Prototype", 1],
+  ["API Integration", 2],
+  ["Retrospective", 2],
+];
+
+const recentPosts = [
+  {
+    title: "CRM Platform: 동적 거래 속성을 가진 CRM 플랫폼 만들기",
+    href: "/projects/crm-platform",
+    date: "2024.06.17",
+  },
+  {
+    title: "WeatherApp: 첫 Android 프로젝트를 포트폴리오 글로 정리하기",
+    href: `/projects/${weatherProject.slug}`,
+    date: "2023.06.10",
+  },
+  {
+    title: "OpenWeatherMap API로 현재 날씨와 예보 데이터 연결하기",
+    href: `/projects/${weatherProject.slug}#prototype`,
+    date: "2023.05.30",
+  },
+  {
+    title: "MainActivity에서 데이터 로더와 View 초기화 클래스로 분리하기",
+    href: `/projects/${weatherProject.slug}#structure`,
+    date: "2023.06.05",
+  },
+];
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="min-h-screen bg-[#08090a] text-[#f7f8f8]">
+      <header className="border-b border-white/[0.06] bg-[#08090a]">
+        <div className="mx-auto max-w-6xl px-5 py-8">
+          <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <Link href="/" className="text-[32px] font-normal leading-none tracking-[-0.704px]">
+                ByuN0-0.log
+              </Link>
+              <p className="mt-3 text-[15px] leading-[1.6] tracking-[-0.165px] text-[#8a8f98]">
+                Git 기록, 프로토타입, 회고를 글처럼 쌓아두는 개발 포트폴리오
+              </p>
+            </div>
+            <nav className="flex gap-5 text-[14px] font-medium text-[#d0d6e0]">
+              <a href="#posts" className="hover:text-white">
+                글
+              </a>
+              <a href="#profile" className="hover:text-white">
+                프로필
+              </a>
+              <a
+                href={githubProfileUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="hover:text-white"
+              >
+                GitHub
+              </a>
+            </nav>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
+      </header>
+
+      <div className="mx-auto grid max-w-6xl gap-8 px-5 py-8 lg:grid-cols-[minmax(0,1fr)_300px]">
+        <section id="posts" className="space-y-8">
+          {homeProjects.map((project, index) => (
+            <article
+              key={project.slug}
+              className="overflow-hidden rounded-[8px] border border-white/[0.08] bg-white/[0.02]"
+            >
+              <div className="grid gap-0 md:grid-cols-[minmax(0,1fr)_280px]">
+                <div className="p-6 sm:p-8">
+                  <div className="mb-4 flex flex-wrap items-center gap-3 text-[13px] text-[#8a8f98]">
+                    <span className="inline-flex items-center gap-2">
+                      <FolderOpen className="size-4 text-[#7170ff]" />
+                      {index === 0 ? "최신 프로젝트" : "이전 프로젝트"}
+                    </span>
+                    <span className="inline-flex items-center gap-2">
+                      <CalendarDays className="size-4" />
+                      {project.period}
+                    </span>
+                  </div>
+                  <Link
+                    href={`/projects/${project.slug}`}
+                    className="block text-[32px] font-normal leading-[1.18] tracking-[-0.704px] hover:text-[#d0d6e0]"
+                  >
+                    {project.slug === "weather-app-android"
+                      ? `${project.title}: GPS 기반 Android 날씨 앱`
+                      : `${project.title}: 동적 거래 속성을 가진 CRM 플랫폼`}
+                  </Link>
+                  <p className="mt-4 max-w-2xl text-[16px] leading-[1.7] text-[#d0d6e0]">
+                    {project.summary}
+                  </p>
+                  <div className="mt-6 flex flex-wrap gap-2">
+                    {project.stacks.slice(0, 5).map((stack) => (
+                      <span
+                        key={stack}
+                        className="rounded-full border border-[#23252a] px-3 py-1 text-[12px] font-medium text-[#d0d6e0]"
+                      >
+                        {stack}
+                      </span>
+                    ))}
+                  </div>
+                  <Link
+                    href={`/projects/${project.slug}`}
+                    className="mt-8 inline-flex items-center gap-2 text-[14px] font-medium text-[#828fff] hover:text-[#a8b0ff]"
+                  >
+                    글 읽기
+                    <ArrowRight className="size-4" />
+                  </Link>
+                </div>
+                <Link
+                  href={`/projects/${project.slug}`}
+                  className="relative flex min-h-[260px] items-center justify-center border-t border-white/[0.06] bg-[#0f1011] p-5 md:border-l md:border-t-0"
+                >
+                  <Image
+                    src={project.heroImage}
+                    alt={`${project.title} preview`}
+                    width={720}
+                    height={1280}
+                    className="h-[260px] w-auto max-w-full rounded-[8px] object-contain opacity-90"
+                  />
+                </Link>
+              </div>
+            </article>
+          ))}
+
+          <section className="rounded-[8px] border border-white/[0.08] bg-white/[0.02]">
+            <div className="border-b border-white/[0.06] px-6 py-4">
+              <h2 className="flex items-center gap-2 text-[18px] font-medium">
+                <BookOpen className="size-5 text-[#7170ff]" />
+                최근 글
+              </h2>
+            </div>
+            <div className="divide-y divide-white/[0.06]">
+              {recentPosts.map((post) => (
+                <Link
+                  key={post.title}
+                  href={post.href}
+                  className="grid gap-2 px-6 py-5 transition hover:bg-white/[0.03] sm:grid-cols-[120px_minmax(0,1fr)]"
+                >
+                  <span className="text-[13px] text-[#62666d]">{post.date}</span>
+                  <span className="text-[16px] leading-[1.5] text-[#d0d6e0]">
+                    {post.title}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </section>
+        </section>
+
+        <aside id="profile" className="space-y-5 lg:sticky lg:top-6 lg:self-start">
+          <section className="rounded-[8px] border border-white/[0.08] bg-white/[0.02] p-5">
+            <div className="flex items-center gap-3">
+              <div className="grid size-12 place-items-center rounded-[8px] bg-[#5e6ad2] text-[20px] font-semibold">
+                B
+              </div>
+              <div>
+                <p className="text-[17px] font-medium">ByuN0-0</p>
+                <p className="text-[13px] text-[#8a8f98]">Portfolio Blog</p>
+              </div>
+            </div>
+            <p className="mt-5 text-[14px] leading-[1.7] text-[#d0d6e0]">
+              프로젝트를 결과물만 나열하지 않고, 기능을 만든 순서와 기술 선택의
+              이유가 보이도록 정리합니다.
+            </p>
+          </section>
+
+          <section className="rounded-[8px] border border-white/[0.08] bg-white/[0.02] p-5">
+            <h2 className="mb-4 flex items-center gap-2 text-[15px] font-medium">
+              <Layers3 className="size-4 text-[#7170ff]" />
+              카테고리
+            </h2>
+            <div className="space-y-3">
+              {categories.map(([name, count]) => (
+                <div key={name} className="flex items-center justify-between text-[14px]">
+                  <span className="text-[#d0d6e0]">{name}</span>
+                  <span className="text-[#62666d]">{count}</span>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section className="rounded-[8px] border border-white/[0.08] bg-white/[0.02] p-5">
+            <h2 className="mb-4 flex items-center gap-2 text-[15px] font-medium">
+              <PenLine className="size-4 text-[#7170ff]" />
+              기록 방식
+            </h2>
+            <ul className="space-y-3 text-[14px] leading-[1.6] text-[#8a8f98]">
+              <li>커밋 로그를 마일스톤으로 정리</li>
+              <li>README와 코드 구조에서 기능 근거 추출</li>
+              <li>가능한 프로젝트는 프로토타입으로 재현</li>
+            </ul>
+          </section>
+
           <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+            href={githubProfileUrl}
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noreferrer"
+            className="flex items-center justify-between rounded-[8px] border border-white/[0.08] bg-[#5e6ad2] px-5 py-4 text-[14px] font-medium text-white transition hover:bg-[#828fff]"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
+            GitHub 저장소
+            <GitBranch className="size-4" />
           </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+        </aside>
+      </div>
+    </main>
   );
 }
