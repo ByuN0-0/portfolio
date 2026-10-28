@@ -12,7 +12,7 @@ import {
 
 import { CrmPrototype } from "@/components/crm/crm-prototype";
 import { WeatherPhone } from "@/components/weather/weather-phone";
-import { getProjectBySlug, projects } from "@/data/projects";
+import { getProjectBySlug, projects, projectStatusLabels } from "@/data/projects";
 import { getStackSections } from "@/data/stack-groups";
 
 type ProjectPageProps = {
@@ -38,8 +38,14 @@ export async function generateMetadata({ params }: ProjectPageProps) {
   }
 
   return {
-    title: `${project.title} | ByuN0-0.log`,
+    title: project.title,
     description: project.summary,
+    openGraph: {
+      title: project.title,
+      description: project.summary,
+      url: `/projects/${project.slug}`,
+    },
+    twitter: { card: "summary_large_image", title: project.title, description: project.summary },
   };
 }
 
@@ -56,8 +62,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   const isHealthCatcherWeb = project.slug === "healthcatcher-web";
   const isHealthHola = project.slug === "healthhola";
   const isManjeom = project.slug === "manjeom";
-  const statusLabel =
-    project.status === "archived" ? "종료/보관" : project.status === "active" ? "진행/운영" : "완료";
+  const isCurrentBusiness = ["manjeom", "mystery", "sumgil"].includes(project.slug);
+  const statusLabel = projectStatusLabels[project.status];
   const categoryLabel = {
     company: "회사 프로젝트",
     business: "사업 프로젝트",
@@ -70,7 +76,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     if (isCrmProject) return "동적 거래 속성을 가진 CRM 플랫폼 만들기";
     if (isHealthHola) return "사업 프로젝트에서 앱과 백엔드를 함께 만들기";
     if (isHealthCatcherWeb) return "헬스캐처 공식 홈페이지 만들기";
-    if (isManjeom) return "웹 기반 점자 학습 서비스 만들기";
+
     if (project.slug === "blynx-insight-platform") return "야구 예측 플랫폼 운영 시스템";
     if (project.slug === "moonshot") return "LLM 챗봇 서비스 운영";
     if (project.slug === "rizzz") return "종료 전 AI 소셜 플랫폼 품질 개선";
@@ -91,9 +97,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     }
     if (isHealthCatcherWeb) {
       return "헬스캐처 사업을 소개하던 공식 홈페이지. 브랜드 소개, 사업 영역, 제휴 문의, 정책 문서를 한 흐름으로 구성했습니다.";
-    }
-    if (isManjeom) {
-      return "웹 기반 점자 학습 서비스. 점자표, 6점 입력, 선택형/입력형 연습, 한글 점자 변환기를 하나의 학습 흐름으로 묶었습니다.";
     }
     if (isCrmProject) {
       return "워크스페이스별 동적 거래 속성을 다루는 CRM 플랫폼. EAV 모델과 AG Grid 편집 UI를 연결했습니다.";
@@ -116,9 +119,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     if (isHealthCatcherWeb) {
       return `${project.subtitle} 사업 소개 채널로서 브랜드 첫 화면, 사업 영역, 팀 소개, 제휴 문의, 정책 문서까지 갖춘 공식 홈페이지입니다.`;
     }
-    if (isManjeom) {
-      return `${project.subtitle} 점자표를 보는 데서 끝나지 않고 6점 입력, 선택형/입력형 연습, 점자 변환기를 연결해 실제로 익힐 수 있는 흐름을 만들었습니다.`;
-    }
     return project.summary;
   })();
   const stackText = (() => {
@@ -134,9 +134,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     if (isHealthCatcherWeb) {
       return "홈페이지는 Vue 3, Vite, Vue Router, Pinia, Tailwind CSS 기반으로 구성했고, Vercel 정적 배포에 맞춰 페이지와 섹션 컴포넌트를 나눴습니다.";
     }
-    if (isManjeom) {
-      return "Next.js App Router와 TypeScript로 화면을 구성하고, hangul-js와 JSON 점자 데이터를 조합해 한글 음절과 기호를 점자로 변환했습니다.";
-    }
+    if (isManjeom)
+      return "Flutter 앱과 Next.js 웹을 함께 개발하고, 공유 학습 콘텐츠와 Firestore 기반 진도 동기화를 연결했습니다.";
+    if (project.slug === "mystery")
+      return "Unity/C#과 URP 2D로 플레이를 구성하고, Netcode for GameObjects와 Steamworks.NET으로 다인 연결 기능을 개발하고 있습니다.";
+    if (project.slug === "sumgil")
+      return "Flutter 앱에 Riverpod와 Drift를 사용하고, TypeScript/Hono API를 Firestore·비공개 Storage와 연결했습니다.";
     return "서비스 요구사항에 맞춰 사용한 기술과 선택 이유입니다.";
   })();
   const structureText = (() => {
@@ -152,9 +155,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     if (isHealthCatcherWeb) {
       return "홈페이지는 페이지 라우트보다 섹션 컴포넌트가 핵심입니다. Home, About, Business, Community, Contact, Policy 페이지 안에서 브랜드 소개와 사업 콘텐츠를 재사용 가능한 섹션 단위로 나누었습니다.";
     }
-    if (isManjeom) {
-      return "점자표, 연습 문제, 변환기가 같은 JSON 데이터를 기준으로 동작하도록 구성했습니다. 한글 변환은 `hangul-js`로 음절을 분해한 뒤 초성, 중성, 종성, 약자, 문장부호, 수학 기호 규칙을 순서대로 적용합니다.";
-    }
+    if (isManjeom)
+      return "학습 콘텐츠와 진도가 앱·웹에서 이어지도록 콘텐츠 팩과 기록 병합을 중심으로 구성했습니다.";
+    if (project.slug === "mystery")
+      return "게임 실행 코드, 네트워크 처리, Editor 도구와 검증 코드를 나누어 개발하고 있습니다.";
+    if (project.slug === "sumgil")
+      return "기록 저장과 사진 전송을 분리하고 기기 내 데이터와 전송 대기 작업을 보존하도록 구성했습니다.";
     return project.architecture.join(" ");
   })();
 
@@ -169,15 +175,17 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             <ArrowLeft className="size-4" />
             ByuN0-0.log
           </Link>
-          <a
-            href={project.repositoryUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-2 rounded-full bg-black px-4 py-2 text-[15px] font-[480] text-white hover:bg-[#2a2a2a]"
-          >
-            <GitBranch className="size-4" />
-            GitHub
-          </a>
+          {project.repositoryUrl ? (
+            <a
+              href={project.repositoryUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 rounded-full bg-black px-4 py-2 text-[15px] font-[480] text-white hover:bg-[#2a2a2a]"
+            >
+              <GitBranch className="size-4" />
+              GitHub
+            </a>
+          ) : null}
         </div>
       </header>
 
@@ -187,12 +195,13 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             <div className="mb-6 flex flex-wrap gap-3 font-mono text-[12px] uppercase tracking-[0.08em] text-[#242424]">
               <span className="inline-flex items-center gap-2">
                 <BookOpen className="size-4" />
-                프로젝트 회고
+                {isCurrentBusiness ? "프로젝트 소개" : "프로젝트 회고"}
               </span>
               <span className="inline-flex items-center gap-2">
                 <CalendarDays className="size-4" />
                 {project.period}
               </span>
+              <span>{statusLabel}</span>
               <span className="inline-flex items-center gap-2">
                 <Layers3 className="size-4" />
                 {project.team}
@@ -221,7 +230,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                   ["상태", statusLabel],
                 ].map(([label, value]) => (
                   <div key={label}>
-                    <dt className="font-mono text-[12px] uppercase tracking-[0.08em] text-[#242424]">{label}</dt>
+                    <dt className="font-mono text-[12px] uppercase tracking-[0.08em] text-[#242424]">
+                      {label}
+                    </dt>
                     <dd className="mt-2 text-[16px] font-[480] leading-6 text-[#0a0a0a]">
                       {value}
                     </dd>
@@ -236,9 +247,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                   <p className="font-mono text-[12px] uppercase tracking-[0.08em] text-[#242424]">
                     Prototype
                   </p>
-                  <h2 className="mt-2 text-[32px] font-[340] tracking-[-0.96px]">
-                    프로토타입
-                  </h2>
+                  <h2 className="mt-2 text-[32px] font-[340] tracking-[-0.96px]">프로토타입</h2>
                   <p className="mt-3 max-w-3xl text-[18px] font-[330] leading-[1.45] tracking-[-0.14px] text-[#0a0a0a]">
                     {isWeatherProject
                       ? "Android 프로젝트의 배경 이미지, 반투명 패널, 하단 탭 구조를 가져와 서울 좌표 기준 실제 OpenWeatherMap 데이터로 표시합니다."
@@ -286,29 +295,54 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               </section>
             ) : null}
 
-            {isManjeom ? (
-              <section id="visual" className="scroll-mt-20">
-                <div className="mb-5">
-                  <p className="font-mono text-[12px] uppercase tracking-[0.08em] text-[#242424]">
-                    Main Screen
-                  </p>
-                  <h2 className="mt-2 text-[32px] font-[340] tracking-[-0.96px]">
-                    서비스 메인 화면
-                  </h2>
-                  <p className="mt-3 max-w-3xl text-[18px] font-[330] leading-[1.45] tracking-[-0.14px] text-[#0a0a0a]">
-                    배포된 만점 서비스의 첫 화면을 캡처해 학습 시작, 점자 변환기, 점자표 진입 흐름을 보여줍니다.
-                  </p>
+            {isCurrentBusiness ? (
+              <PostSection id="visual" title="프로젝트 화면">
+                {project.imageNote ? <p className="mb-6">{project.imageNote}</p> : null}
+                <div
+                  className={project.slug === "mystery" ? "space-y-6" : "grid gap-6 sm:grid-cols-2"}
+                >
+                  {project.gallery.map((shot) => (
+                    <figure key={shot.src} className="min-w-0">
+                      <div className="flex justify-center rounded-[24px] border border-black/[0.1] bg-white p-4">
+                        <Image
+                          src={shot.src}
+                          alt={shot.alt}
+                          width={shot.width ?? 960}
+                          height={shot.height ?? 640}
+                          sizes={
+                            project.slug === "mystery"
+                              ? "(max-width: 1024px) 100vw, 760px"
+                              : "(max-width: 640px) 100vw, 380px"
+                          }
+                          className="h-auto max-h-[600px] w-auto max-w-full object-contain"
+                        />
+                      </div>
+                      <figcaption className="mt-3 text-[14px] leading-6">{shot.caption}</figcaption>
+                    </figure>
+                  ))}
                 </div>
-                <div className="overflow-hidden rounded-[24px] border border-black/[0.1] bg-white">
-                  <Image
-                    src={project.heroImage}
-                    alt={`${project.title} main screen`}
-                    width={1440}
-                    height={900}
-                    className="h-auto w-full object-contain"
-                  />
-                </div>
-              </section>
+              </PostSection>
+            ) : null}
+
+            {isCurrentBusiness ? (
+              <PostSection id="history" title="개발·운영 이력">
+                <ol className="divide-y divide-black/[0.1]">
+                  {project.milestones.map((milestone) => (
+                    <li
+                      key={`${milestone.date}-${milestone.title}`}
+                      className="grid gap-2 py-5 first:pt-0 sm:grid-cols-[110px_minmax(0,1fr)]"
+                    >
+                      <time dateTime={milestone.date} className="text-[14px] tabular-nums">
+                        {milestone.date.replaceAll("-", ".")}
+                      </time>
+                      <div>
+                        <h3 className="text-[18px] font-[540]">{milestone.title}</h3>
+                        <p className="mt-2 text-[16px] leading-7">{milestone.description}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+              </PostSection>
             ) : null}
 
             {project.category === "company" ? (
@@ -400,10 +434,14 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
         <aside className="space-y-5 lg:sticky lg:top-6 lg:self-start">
           <section className="rounded-[24px] bg-[#f1f0eb] p-5 text-[#0a0a0a]">
-            <p className="font-mono text-[12px] uppercase tracking-[0.08em] text-[#555]">Category</p>
+            <p className="font-mono text-[12px] uppercase tracking-[0.08em] text-[#555]">
+              Category
+            </p>
             <p className="mt-2 text-[20px] font-[540]">{categoryLabel}</p>
             <p className="mt-3 text-[15px] font-[330] leading-[1.45] tracking-[-0.14px] text-[#111]">
-              실제 서비스에서 맡았던 기능과 운영 경험을 중심으로 정리한 프로젝트입니다.
+              {isCurrentBusiness
+                ? "직접 개발하는 앱·게임의 구현 내용과 현재 진행 상태를 정리했습니다."
+                : "실제 서비스에서 맡았던 기능과 운영 경험을 중심으로 정리한 프로젝트입니다."}
             </p>
           </section>
 
@@ -412,7 +450,17 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             <nav className="space-y-2 text-[14px] font-[480] text-[#0a0a0a]">
               {[
                 ["소개", "#overview"],
-                [isHealthCatcherWeb || isManjeom ? "메인 화면" : project.category === "company" ? "프로젝트 범위" : "프로토타입", isHealthCatcherWeb || isManjeom || project.category === "company" ? "#visual" : "#prototype"],
+                [
+                  isHealthCatcherWeb || isCurrentBusiness
+                    ? "프로젝트 화면"
+                    : project.category === "company"
+                      ? "프로젝트 범위"
+                      : "프로토타입",
+                  isHealthCatcherWeb || isCurrentBusiness || project.category === "company"
+                    ? "#visual"
+                    : "#prototype",
+                ],
+                ...(isCurrentBusiness ? [["개발·운영 이력", "#history"]] : []),
                 ["기능", "#features"],
                 ["기술", "#stack"],
                 ["구조", "#structure"],
@@ -420,22 +468,28 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               ]
                 .filter(([, href]) => href !== "#prototype" || isWeatherProject || isCrmProject)
                 .map(([label, href]) => (
-                  <a key={href} href={href} className="block rounded-full px-3 py-2 hover:bg-black/[0.06]">
-                  {label}
-                </a>
-              ))}
+                  <a
+                    key={href}
+                    href={href}
+                    className="block rounded-full px-3 py-2 hover:bg-black/[0.06]"
+                  >
+                    {label}
+                  </a>
+                ))}
             </nav>
           </section>
 
-          <a
-            href={project.repositoryUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="flex items-center justify-between rounded-full bg-black px-5 py-4 text-[15px] font-[480] text-white transition hover:bg-[#2a2a2a]"
-          >
-            저장소 보기
-            <GitBranch className="size-4" />
-          </a>
+          {project.repositoryUrl ? (
+            <a
+              href={project.repositoryUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center justify-between rounded-full bg-black px-5 py-4 text-[15px] font-[480] text-white transition hover:bg-[#2a2a2a]"
+            >
+              저장소 보기
+              <GitBranch className="size-4" />
+            </a>
+          ) : null}
 
           {project.liveUrl ? (
             <a
@@ -464,7 +518,10 @@ function PostSection({
   children: React.ReactNode;
 }) {
   return (
-    <section id={id} className="scroll-mt-20 text-[18px] font-[320] leading-[1.55] tracking-[-0.26px] text-[#0a0a0a]">
+    <section
+      id={id}
+      className="scroll-mt-20 text-[18px] font-[320] leading-[1.55] tracking-[-0.26px] text-[#0a0a0a]"
+    >
       <h2 className="mb-5 border-b border-black/[0.1] pb-4 text-[32px] font-[340] leading-[1.1] tracking-[-0.96px] text-[#0a0a0a] sm:text-[44px]">
         {title}
       </h2>
@@ -475,111 +532,173 @@ function PostSection({
 
 function getStackReasons(slug: string): Record<string, string> {
   const commonReasons: Record<string, string> = {
-    TypeScript: "프론트엔드와 Node.js 백엔드에서 타입 안정성을 확보하고 API 계약 변경을 추적하기 위해 사용했습니다.",
-    JavaScript: "Vue 기반 정적 홈페이지를 빠르게 구성하고 브라우저 환경에서 단순하게 운영하기 위해 사용했습니다.",
+    Dart: "Flutter 앱의 학습·러닝 화면과 기기 내 기록 처리를 구현하는 언어입니다.",
+    Flutter: "iOS와 Android 앱 화면 및 기기 기능 연동을 함께 구성했습니다.",
+    Riverpod: "숨길의 앱 상태와 기록·지도 화면의 데이터 흐름을 관리합니다.",
+    Drift: "운동 기록과 전송 대기 작업을 기기 내 SQLite에 보관합니다.",
+    Hono: "숨길의 계정·기록·사진·공유 요청을 TypeScript API로 처리합니다.",
+    Firestore: "계정별 기록과 동기화 상태를 서버에서 저장하고 관리합니다.",
+    "Firebase Auth": "만점 앱·웹의 로그인과 계정별 학습 기록 연결에 사용합니다.",
+    "Cloud Storage": "사진 파일을 비공개 저장소에 보관하고 API의 접근 검증과 연결합니다.",
+    "Naver Map": "숨길에서 GPS 경로와 장소·성장 표식을 지도 위에 표시합니다.",
+    "C#": "Unity의 게임 규칙, 상호작용과 개발 도구를 구현하는 언어입니다.",
+    Unity: "탐색·아이템·NPC 상호작용을 게임 씬과 실행 코드로 구성합니다.",
+    "URP 2D": "학교·기숙사의 픽셀 환경과 2D 렌더링을 구성합니다.",
+    "Netcode for GameObjects": "다인 세션의 참가자 상태와 게임 오브젝트 동기화를 연결합니다.",
+    "Steamworks.NET": "Steam 로비·친구 초대 및 네트워크 전송 연동에 사용합니다.",
+    "Unity Test Framework": "게임 규칙과 실행 흐름을 EditMode·PlayMode로 검사합니다.",
+    TypeScript:
+      "프론트엔드와 Node.js 백엔드에서 타입 안정성을 확보하고 API 계약 변경을 추적하기 위해 사용했습니다.",
+    JavaScript:
+      "Vue 기반 정적 홈페이지를 빠르게 구성하고 브라우저 환경에서 단순하게 운영하기 위해 사용했습니다.",
     Java: "Spring Boot 기반 서버와 Android 앱 개발 환경에 맞춰 안정적인 객체지향 구조를 만들기 위해 사용했습니다.",
-    "JSON Data": "점자표, 문제, 변환기가 같은 원천 데이터를 보도록 표준 점자 데이터를 구조화하기 위해 사용했습니다.",
-    "hangul-js": "한글 음절을 초성, 중성, 종성으로 분해해 점자 변환 규칙을 적용하기 위해 사용했습니다.",
-    "Docker Build": "서비스별 실행 환경을 이미지로 고정하고 배포 과정에서 빌드 결과를 일관되게 유지하기 위해 사용했습니다.",
-    "ECS Deploy": "컨테이너 서비스를 AWS ECS에 배포하고 운영 환경 업데이트를 자동화하기 위해 사용했습니다.",
-    "ECS Blue-Green Deploy": "프론트엔드 운영 배포에서 새 버전 전환 위험을 줄이기 위해 blue-green 방식으로 구성했습니다.",
-    "EventBridge Scheduler": "크롤러와 배치성 작업을 정해진 시간에 실행하기 위해 AWS EventBridge 스케줄을 사용했습니다.",
+    "JSON Data":
+      "점자표, 문제, 변환기가 같은 원천 데이터를 보도록 표준 점자 데이터를 구조화하기 위해 사용했습니다.",
+    "hangul-js":
+      "한글 음절을 초성, 중성, 종성으로 분해해 점자 변환 규칙을 적용하기 위해 사용했습니다.",
+    "Docker Build":
+      "서비스별 실행 환경을 이미지로 고정하고 배포 과정에서 빌드 결과를 일관되게 유지하기 위해 사용했습니다.",
+    "ECS Deploy":
+      "컨테이너 서비스를 AWS ECS에 배포하고 운영 환경 업데이트를 자동화하기 위해 사용했습니다.",
+    "ECS Blue-Green Deploy":
+      "프론트엔드 운영 배포에서 새 버전 전환 위험을 줄이기 위해 blue-green 방식으로 구성했습니다.",
+    "EventBridge Scheduler":
+      "크롤러와 배치성 작업을 정해진 시간에 실행하기 위해 AWS EventBridge 스케줄을 사용했습니다.",
   };
   const reasons: Record<string, Record<string, string>> = {
     healthhola: {
       Expo: "빠르게 앱을 빌드하고 Android/iOS 개발 환경을 맞추기 위해 선택했습니다.",
-      "React Native": "하나의 코드베이스로 모바일 앱 화면을 구현하면서 네이티브 앱 경험을 만들 수 있어 사용했습니다.",
-      "Expo Router": "파일 기반 라우팅으로 홈, 체험단, 커뮤니티, 마이페이지 같은 화면 흐름을 관리하기 위해 사용했습니다.",
-      "Redux Toolkit": "인증, 유저, 체험단, 커뮤니티, 설문, 쿠폰처럼 상태 도메인이 많아 slice 단위로 나누기 위해 사용했습니다.",
+      "React Native":
+        "하나의 코드베이스로 모바일 앱 화면을 구현하면서 네이티브 앱 경험을 만들 수 있어 사용했습니다.",
+      "Expo Router":
+        "파일 기반 라우팅으로 홈, 체험단, 커뮤니티, 마이페이지 같은 화면 흐름을 관리하기 위해 사용했습니다.",
+      "Redux Toolkit":
+        "인증, 유저, 체험단, 커뮤니티, 설문, 쿠폰처럼 상태 도메인이 많아 slice 단위로 나누기 위해 사용했습니다.",
       Axios: "백엔드 API 호출과 토큰 주입, 재발급 인터셉터를 공통화하기 위해 사용했습니다.",
-      "Spring Boot": "모바일 앱에서 필요한 REST API를 빠르게 구성하고 도메인별 서비스 계층을 만들기 위해 선택했습니다.",
-      "Spring Security": "로그인 이후 인증이 필요한 API와 공개 조회 API를 명확히 나누기 위해 사용했습니다.",
+      "Spring Boot":
+        "모바일 앱에서 필요한 REST API를 빠르게 구성하고 도메인별 서비스 계층을 만들기 위해 선택했습니다.",
+      "Spring Security":
+        "로그인 이후 인증이 필요한 API와 공개 조회 API를 명확히 나누기 위해 사용했습니다.",
       JWT: "모바일 앱에서 stateless 인증 흐름을 만들고 access/refresh token 재발급을 처리하기 위해 사용했습니다.",
-      OAuth2: "소셜 로그인 확장을 고려해 Google, Kakao, Naver 응답을 처리할 수 있는 구조로 도입했습니다.",
+      OAuth2:
+        "소셜 로그인 확장을 고려해 Google, Kakao, Naver 응답을 처리할 수 있는 구조로 도입했습니다.",
       PostgreSQL: "운영 데이터를 관계형 모델로 안정적으로 저장하기 위해 사용했습니다.",
       Redis: "refresh token과 인증 보조 데이터를 빠르게 조회하고 관리하기 위해 사용했습니다.",
-      "AWS S3": "커뮤니티 게시글 이미지 같은 파일 업로드를 서버 파일시스템에 묶지 않기 위해 사용했습니다.",
+      "AWS S3":
+        "커뮤니티 게시글 이미지 같은 파일 업로드를 서버 파일시스템에 묶지 않기 위해 사용했습니다.",
     },
     "healthcatcher-web": {
-      "Vue 3": "작은 팀에서 브랜드 홈페이지를 빠르게 구성하고 섹션 컴포넌트를 단순하게 관리하기 위해 선택했습니다.",
+      "Vue 3":
+        "작은 팀에서 브랜드 홈페이지를 빠르게 구성하고 섹션 컴포넌트를 단순하게 관리하기 위해 선택했습니다.",
       Vite: "정적 홈페이지 개발 서버와 빌드 속도가 빨라 랜딩 페이지 작업에 적합했습니다.",
-      "Vue Router": "소개, 사업, 커뮤니티, 문의, 정책 페이지를 명확한 라우트로 나누기 위해 사용했습니다.",
-      Pinia: "Vue 생태계의 가벼운 상태 관리 도구로, 공지 모달이나 전역 상태 확장 가능성을 남기기 위해 포함했습니다.",
-      "Tailwind CSS": "반응형 패딩, 타이포그래피, 섹션 레이아웃을 빠르게 조정하기 위해 사용했습니다.",
+      "Vue Router":
+        "소개, 사업, 커뮤니티, 문의, 정책 페이지를 명확한 라우트로 나누기 위해 사용했습니다.",
+      Pinia:
+        "Vue 생태계의 가벼운 상태 관리 도구로, 공지 모달이나 전역 상태 확장 가능성을 남기기 위해 포함했습니다.",
+      "Tailwind CSS":
+        "반응형 패딩, 타이포그래피, 섹션 레이아웃을 빠르게 조정하기 위해 사용했습니다.",
       PostCSS: "Tailwind 빌드 파이프라인을 구성하기 위한 기본 CSS 처리 도구로 사용했습니다.",
       Vercel: "정적 사이트를 빠르게 배포하고 외부에 공유하기 위해 선택했습니다.",
     },
     "weather-app-android": {
-      Android: "첫 모바일 프로젝트로 실제 Android Activity, 권한, 리소스 구조를 경험하기 위해 사용했습니다.",
+      Android:
+        "첫 모바일 프로젝트로 실제 Android Activity, 권한, 리소스 구조를 경험하기 위해 사용했습니다.",
       Java: "당시 Android 수업/프로젝트 환경에 맞춰 기본 언어로 사용했습니다.",
-      Retrofit2: "OpenWeatherMap의 여러 REST API를 인터페이스 단위로 분리해 호출하기 위해 선택했습니다.",
+      Retrofit2:
+        "OpenWeatherMap의 여러 REST API를 인터페이스 단위로 분리해 호출하기 위해 선택했습니다.",
       Gson: "날씨, 예보, 대기질 응답 JSON을 Java 모델로 매핑하기 위해 사용했습니다.",
-      "OpenWeatherMap API": "현재 날씨, 예보, 대기질 데이터를 한 서비스에서 받아올 수 있어 선택했습니다.",
+      "OpenWeatherMap API":
+        "현재 날씨, 예보, 대기질 데이터를 한 서비스에서 받아올 수 있어 선택했습니다.",
       Glide: "날씨 아이콘과 이미지 리소스를 화면에 안정적으로 표시하기 위해 사용했습니다.",
-      WeatherView: "비, 눈 같은 날씨 효과를 Android 화면에서 시각적으로 표현하기 위해 사용했습니다.",
-      "Material Components": "탭과 버튼 등 기본 UI 요소를 Android 스타일에 맞춰 구성하기 위해 사용했습니다.",
+      WeatherView:
+        "비, 눈 같은 날씨 효과를 Android 화면에서 시각적으로 표현하기 위해 사용했습니다.",
+      "Material Components":
+        "탭과 버튼 등 기본 UI 요소를 Android 스타일에 맞춰 구성하기 위해 사용했습니다.",
     },
     "crm-platform": {
       "Spring Boot": "인증, 워크스페이스, 회사, 거래 API를 계층적으로 구성하기 위해 선택했습니다.",
-      "Next.js": "CRM 프론트엔드를 라우팅과 컴포넌트 단위로 구성하고 백엔드 API와 연결하기 위해 사용했습니다.",
-      React: "거래 그리드와 속성 편집 UI처럼 상태 변화가 많은 화면을 컴포넌트로 관리하기 위해 사용했습니다.",
-      MySQL: "워크스페이스, 회사, 거래, 동적 속성 데이터를 관계형 구조로 저장하기 위해 사용했습니다.",
+      "Next.js":
+        "CRM 프론트엔드를 라우팅과 컴포넌트 단위로 구성하고 백엔드 API와 연결하기 위해 사용했습니다.",
+      React:
+        "거래 그리드와 속성 편집 UI처럼 상태 변화가 많은 화면을 컴포넌트로 관리하기 위해 사용했습니다.",
+      MySQL:
+        "워크스페이스, 회사, 거래, 동적 속성 데이터를 관계형 구조로 저장하기 위해 사용했습니다.",
       "Spring Security": "로그인 이후 워크스페이스별 접근 권한을 검증하기 위해 사용했습니다.",
       JWT: "프론트엔드와 백엔드가 분리된 환경에서 인증 상태를 전달하기 위해 사용했습니다.",
       JPA: "도메인 엔티티와 Repository 기반 데이터 접근을 빠르게 구성하기 위해 사용했습니다.",
       "AG Grid": "거래 목록을 스프레드시트처럼 편집하고 동적 컬럼을 표현하기 위해 선택했습니다.",
-      "Ant Design": "CRM 화면의 사이드바, 폼, 버튼 등 관리 도구 UI를 빠르게 구성하기 위해 사용했습니다.",
+      "Ant Design":
+        "CRM 화면의 사이드바, 폼, 버튼 등 관리 도구 UI를 빠르게 구성하기 위해 사용했습니다.",
       Docker: "로컬과 배포 환경 차이를 줄이고 서버 실행 환경을 묶기 위해 실험했습니다.",
-      "GitHub Actions": "빌드와 배포 과정을 자동화하며 운영 환경 연결 문제를 다루기 위해 사용했습니다.",
+      "GitHub Actions":
+        "빌드와 배포 과정을 자동화하며 운영 환경 연결 문제를 다루기 위해 사용했습니다.",
     },
     manjeom: {
-      TypeScript: "점자 데이터 타입과 변환 결과 형태를 명확히 잡아, 데이터 수정이 화면과 변환 로직에 미치는 영향을 추적하기 위해 사용했습니다.",
-      "Next.js": "점자표, 연습, 변환기, 관리자 화면을 App Router 기반 페이지로 나누고 실제 서비스로 배포하기 위해 사용했습니다.",
-      React: "6점 입력 패드, 퀴즈 화면, 변환 결과처럼 상태가 자주 바뀌는 UI를 컴포넌트로 구성하기 위해 사용했습니다.",
-      "Tailwind CSS": "학습 화면의 버튼, 카드, 점자표 레이아웃을 빠르게 만들고 반응형 간격을 조정하기 위해 사용했습니다.",
-      Vercel: "개인 도메인 manjeom.biyeon.net에 빠르게 배포하고 정적/동적 페이지를 함께 운영하기 위해 사용했습니다.",
+      TypeScript:
+        "점자 데이터 타입과 변환 결과 형태를 명확히 잡아, 데이터 수정이 화면과 변환 로직에 미치는 영향을 추적하기 위해 사용했습니다.",
+      "Next.js":
+        "웹 학습과 점자 도구를 App Router 페이지로 구성하고 계정·학습 API를 함께 제공합니다.",
+      React:
+        "6점 입력 패드, 퀴즈 화면, 변환 결과처럼 상태가 자주 바뀌는 UI를 컴포넌트로 구성하기 위해 사용했습니다.",
+      "Tailwind CSS":
+        "학습 화면의 버튼, 카드, 점자표 레이아웃을 빠르게 만들고 반응형 간격을 조정하기 위해 사용했습니다.",
+      Vercel:
+        "manjeom.biyeon.net의 웹과 동기화·구매 검증 API를 운영하는 배포 환경입니다.",
     },
     "blynx-insight-platform": {
-      NestJS: "예측, 사용자, 스토어, 라이브 운영 API처럼 요청/응답이 많은 서버 기능을 모듈 단위로 나누기 위해 사용했습니다.",
-      React: "관리자 대시보드와 사용자 웹에서 상태 변화가 많은 운영 화면을 컴포넌트로 구성하기 위해 사용했습니다.",
+      NestJS:
+        "예측, 사용자, 스토어, 라이브 운영 API처럼 요청/응답이 많은 서버 기능을 모듈 단위로 나누기 위해 사용했습니다.",
+      React:
+        "관리자 대시보드와 사용자 웹에서 상태 변화가 많은 운영 화면을 컴포넌트로 구성하기 위해 사용했습니다.",
       Vite: "관리자 대시보드를 빠르게 개발하고 빌드하기 위한 프론트엔드 도구로 사용했습니다.",
-      "Spring Boot": "재화와 정산처럼 트랜잭션 안정성이 중요한 서버를 별도 서비스로 구성하기 위해 사용했습니다.",
-      "Spring Batch": "대량 베팅 정산, 스냅샷 백필, 환불처럼 재시도와 처리 이력이 중요한 작업에 사용했습니다.",
+      "Spring Boot":
+        "재화와 정산처럼 트랜잭션 안정성이 중요한 서버를 별도 서비스로 구성하기 위해 사용했습니다.",
+      "Spring Batch":
+        "대량 베팅 정산, 스냅샷 백필, 환불처럼 재시도와 처리 이력이 중요한 작업에 사용했습니다.",
       Kotlin: "Spring 서버에서 null 안정성과 간결한 도메인 코드를 확보하기 위해 사용했습니다.",
       MongoDB: "예측 그룹과 경기 관련 문서 데이터를 유연하게 저장하기 위해 사용했습니다.",
-      MySQL: "재화, 지갑, 거래, 정산처럼 무결성이 중요한 데이터를 관계형으로 관리하기 위해 사용했습니다.",
-      "Toss Payments": "스토어 결제와 유료 상품 구매 흐름을 국내 결제 환경에 맞춰 붙이기 위해 사용했습니다.",
+      MySQL:
+        "재화, 지갑, 거래, 정산처럼 무결성이 중요한 데이터를 관계형으로 관리하기 위해 사용했습니다.",
+      "Toss Payments":
+        "스토어 결제와 유료 상품 구매 흐름을 국내 결제 환경에 맞춰 붙이기 위해 사용했습니다.",
       AWS: "ECS, S3, CloudFront, EventBridge, Lambda 등 운영 인프라를 구성하기 위해 사용했습니다.",
-      Terraform: "회사 인프라 변경을 코드로 남기고 dev/prod 환경 차이를 통제하기 위해 사용했습니다.",
+      Terraform:
+        "회사 인프라 변경을 코드로 남기고 dev/prod 환경 차이를 통제하기 위해 사용했습니다.",
       Docker: "서비스별 빌드와 배포 환경을 일관되게 만들기 위해 사용했습니다.",
     },
     moonshot: {
       NestJS: "LLM API, 문의 폼, 크롤링 요청, 챗봇 서버를 모듈 단위로 나누기 위해 사용했습니다.",
-      "Next.js": "서비스 소개, 로그인, 종료 안내, 메시지 입력 화면을 웹에서 운영하기 위해 사용했습니다.",
+      "Next.js":
+        "서비스 소개, 로그인, 종료 안내, 메시지 입력 화면을 웹에서 운영하기 위해 사용했습니다.",
       "OpenAI API": "챗봇 응답 스트리밍과 모델별 토큰 사용량 처리를 위해 사용했습니다.",
       "Gemini API": "OpenAI 외 모델 옵션을 함께 지원하고 출력 설정을 비교하기 위해 사용했습니다.",
       "AWS Bedrock": "AWS 환경에서 관리되는 LLM 모델 사용 가능성을 열기 위해 사용했습니다.",
       BullMQ: "크롤링과 챗봇 처리처럼 오래 걸리는 작업을 큐 기반으로 분리하기 위해 사용했습니다.",
       Redis: "BullMQ 큐와 캐시성 상태 관리를 위해 사용했습니다.",
-      MongoDB: "문서, 대화, 서비스 설정처럼 구조가 바뀔 수 있는 데이터를 저장하기 위해 사용했습니다.",
+      MongoDB:
+        "문서, 대화, 서비스 설정처럼 구조가 바뀔 수 있는 데이터를 저장하기 위해 사용했습니다.",
       OpenSearch: "크롤링 문서 검색과 메타데이터 기반 조회를 위해 사용했습니다.",
       "AWS ECS": "NestJS/BullMQ 서비스를 컨테이너 단위로 배포하기 위해 사용했습니다.",
       "Secrets Manager": "dev/prod 환경의 민감 설정을 코드 밖에서 관리하기 위해 사용했습니다.",
       Docker: "챗봇 서버와 워커 배포 이미지를 일관되게 만들기 위해 사용했습니다.",
     },
     rizzz: {
-      NestJS: "AI 채팅, OAuth, 크롤러, 야구 데이터 API를 도메인별 모듈로 관리하기 위해 사용했습니다.",
+      NestJS:
+        "AI 채팅, OAuth, 크롤러, 야구 데이터 API를 도메인별 모듈로 관리하기 위해 사용했습니다.",
       React: "관리자 화면에서 에이전트 설정과 Redis 상태를 다루기 위해 사용했습니다.",
       Vite: "관리자 프론트엔드를 빠르게 개발하고 빌드하기 위해 사용했습니다.",
-      TypeScript: "API 응답 구조와 관리자 화면 상태를 타입으로 정리해 운영 중 오류를 줄이기 위해 사용했습니다.",
-      MongoDB: "사용자, 대화, 선수 데이터처럼 문서형으로 다루기 쉬운 데이터를 저장하기 위해 사용했습니다.",
+      TypeScript:
+        "API 응답 구조와 관리자 화면 상태를 타입으로 정리해 운영 중 오류를 줄이기 위해 사용했습니다.",
+      MongoDB:
+        "사용자, 대화, 선수 데이터처럼 문서형으로 다루기 쉬운 데이터를 저장하기 위해 사용했습니다.",
       Redis: "채팅 세션, 큐, 캐시성 데이터를 처리하기 위해 사용했습니다.",
       OpenSearch: "장기 메모리와 추천/검색 흐름을 위해 사용했습니다.",
       LangChain: "LLM 기반 대화 처리 흐름을 구성하기 위해 사용했습니다.",
       LangGraph: "여러 단계의 AI 대화 흐름을 그래프 형태로 조합하기 위해 사용했습니다.",
       "AWS Bedrock": "AWS 기반 LLM 모델 호출을 서비스 백엔드에 연결하기 위해 사용했습니다.",
       "AWS Lambda": "KBO/NPB/NamuWiki 크롤러를 서버리스 작업으로 배포하기 위해 사용했습니다.",
-      Terraform: "크롤러 Lambda, S3, IAM, CloudWatch, EventBridge 리소스를 코드로 관리하기 위해 사용했습니다.",
+      Terraform:
+        "크롤러 Lambda, S3, IAM, CloudWatch, EventBridge 리소스를 코드로 관리하기 위해 사용했습니다.",
     },
   };
 

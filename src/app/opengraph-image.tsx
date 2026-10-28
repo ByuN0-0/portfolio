@@ -50,7 +50,7 @@ export default function OpenGraphImage() {
             >
               개발 포트폴리오
             </span>
-            <span style={{ fontSize: 28 }}>Backend Developer</span>
+            <span style={{ fontSize: 28 }}>Independent Developer</span>
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
@@ -73,7 +73,7 @@ export default function OpenGraphImage() {
                 maxWidth: 860,
               }}
             >
-              백엔드 API, 운영 도구, 배치, 결제, 크롤링, 배포 경험을 정리한 개발 기록
+              앱과 게임을 개발·운영하는 1인 개발자의 기록
             </p>
           </div>
 

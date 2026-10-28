@@ -13,7 +13,8 @@ import {
   UserRound,
 } from "lucide-react";
 
-import { projects } from "@/data/projects";
+import { careers, profileDescription } from "@/data/profile";
+import { projects, projectStatusLabels } from "@/data/projects";
 import { getFeaturedStacks } from "@/data/stack-groups";
 
 type HomeCategory = "all" | "company" | "business" | "personal" | "prototype";
@@ -38,7 +39,7 @@ const emailUrl = "mailto:devbyeon@gmail.com";
 const linkedInUrl = "https://www.linkedin.com/in/biyeon-hwang-854190376/";
 const blogUrl = "https://blog.biyeon.net";
 const profileAvatarUrl = "/profile/avatar.webp";
-const featuredProjectSlugs = ["blynx-insight-platform", "moonshot", "manjeom"];
+const featuredProjectSlugs = ["manjeom", "mystery", "sumgil"];
 const featuredProjects = featuredProjectSlugs
   .map((slug) => projects.find((project) => project.slug === slug))
   .filter((project): project is (typeof projects)[number] => Boolean(project));
@@ -48,7 +49,9 @@ const previewImageDimensions: Record<string, { width: number; height: number }> 
   rizzz: { width: 960, height: 640 },
   healthhola: { width: 780, height: 1440 },
   "healthcatcher-web": { width: 3456, height: 1800 },
-  manjeom: { width: 1440, height: 900 },
+  manjeom: { width: 720, height: 1600 },
+  mystery: { width: 1672, height: 941 },
+  sumgil: { width: 390, height: 844 },
   "weather-app-android": { width: 784, height: 1440 },
   "crm-platform": { width: 960, height: 640 },
 };
@@ -114,7 +117,9 @@ function projectPostDescription(slug: string) {
   if (slug === "crm-platform") return "동적 거래 속성을 가진 CRM 플랫폼";
   if (slug === "healthhola") return "건강 체험단 모바일 앱과 백엔드";
   if (slug === "healthcatcher-web") return "헬스캐처 공식 홈페이지";
-  if (slug === "manjeom") return "웹 기반 점자 학습 서비스";
+  if (slug === "manjeom") return "점자 학습 앱·웹 · 2026.10 공식 오픈";
+  if (slug === "mystery") return "Unity 기반 추리게임 · 개발 중";
+  if (slug === "sumgil") return "러닝·기록 앱 · 개발 중";
   if (slug === "blynx-insight-platform") return "야구 예측 플랫폼 운영 시스템";
   if (slug === "moonshot") return "LLM 챗봇 서비스 운영";
   if (slug === "rizzz") return "종료 전 AI 소셜 플랫폼 품질 개선";
@@ -134,7 +139,11 @@ function projectHomeSummary(slug: string) {
     "healthcatcher-web":
       "헬스캐처 사업을 소개하던 공식 홈페이지. 브랜드 소개, 사업 영역, 팀 소개, 제휴 문의와 정책 문서를 한 곳에 모은 웹사이트.",
     manjeom:
-      "한글 점자, 숫자, 로마자, 수학 기호를 표와 문제로 익히는 점자 학습 웹서비스. 6점 입력, 선택형/입력형 연습, 점자 변환기를 함께 제공.",
+      "2026년 8월 본 개발, 10월 공식 오픈한 점자 학습 서비스. Flutter 앱과 웹에서 단계별 학습, 6점 입력, 오답 복습과 학습 기록 동기화를 제공.",
+    mystery:
+      "학교와 기숙사를 탐색하며 NPC와 대화하고 아이템·단서를 다루는 Unity 추리게임. 정식 이름은 미정이며 Steam 연동과 1인 자유 체험을 개발 중.",
+    sumgil:
+      "달린 길과 사진·메모를 쌓고 친구와 나누는 러닝 기록 앱. Flutter와 Hono API로 기기 내 기록 보관, 업로드 재시도와 지도·공유 기능을 개발 중.",
     "crm-platform":
       "회사와 거래 정보를 워크스페이스 단위로 관리하는 웹 CRM. 거래 속성을 자유롭게 추가할 수 있는 동적 필드 구조가 핵심.",
     "weather-app-android":
@@ -179,10 +188,18 @@ export default async function Home({
               <a href="#profile" className="rounded-full px-4 py-2 hover:bg-black hover:text-white">
                 프로필
               </a>
-              <a href={blogUrl} target="_blank" rel="noreferrer" className="rounded-full px-4 py-2 hover:bg-black hover:text-white">
+              <a
+                href={blogUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="rounded-full px-4 py-2 hover:bg-black hover:text-white"
+              >
                 블로그
               </a>
-              <Link href="/resume" className="rounded-full px-4 py-2 hover:bg-black hover:text-white">
+              <Link
+                href="/resume"
+                className="rounded-full px-4 py-2 hover:bg-black hover:text-white"
+              >
                 이력서
               </Link>
               <a
@@ -210,7 +227,7 @@ export default async function Home({
                   대표 프로젝트
                 </h2>
                 <p className="mt-4 max-w-2xl text-[18px] font-[330] leading-[1.45] tracking-[-0.14px]">
-                  실서비스 운영, AI 제품 개발, 개인 서비스 구현 경험이 가장 잘 드러나는 작업입니다.
+                  비연에서 직접 개발·운영하는 서비스와 출시를 준비 중인 앱·게임입니다.
                 </p>
               </div>
               <div className="grid gap-px bg-black/[0.12] lg:grid-cols-3">
@@ -223,7 +240,7 @@ export default async function Home({
                     <div className="relative mb-5 aspect-[16/10] overflow-hidden rounded-[16px] bg-white">
                       <Image
                         src={project.heroImage}
-                        alt={`${project.title} featured preview`}
+                        alt={project.heroAlt ?? `${project.title} featured preview`}
                         fill
                         sizes="(max-width: 1024px) 100vw, 260px"
                         loading="eager"
@@ -236,6 +253,7 @@ export default async function Home({
                         {categoryLabel[project.category]}
                       </span>
                       <span>{project.period}</span>
+                      <span>{projectStatusLabels[project.status]}</span>
                     </div>
                     <h3>
                       <span className="block text-[28px] font-[540] leading-[1.08] tracking-[-0.52px]">
@@ -248,6 +266,11 @@ export default async function Home({
                     <p className="mt-3 overflow-hidden text-[14px] font-[330] leading-[1.5] tracking-[-0.14px] text-[#333] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3]">
                       {projectHomeSummary(project.slug)}
                     </p>
+                    {project.imageNote ? (
+                      <p className="mt-3 text-[12px] leading-5 text-[#202020]">
+                        {project.imageNote}
+                      </p>
+                    ) : null}
                   </Link>
                 ))}
               </div>
@@ -276,11 +299,9 @@ export default async function Home({
                         <CalendarDays className="size-4" />
                         {project.period}
                       </span>
+                      <span>{projectStatusLabels[project.status]}</span>
                     </div>
-                    <Link
-                      href={`/projects/${project.slug}`}
-                      className="block hover:underline"
-                    >
+                    <Link href={`/projects/${project.slug}`} className="block hover:underline">
                       <span className="block text-[38px] font-[340] leading-[1.05] tracking-[-0.96px]">
                         {project.title}
                       </span>
@@ -291,6 +312,9 @@ export default async function Home({
                     <p className="mt-4 max-w-2xl overflow-hidden text-[17px] font-[330] leading-[1.5] tracking-[-0.14px] text-[#333] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3]">
                       {projectHomeSummary(project.slug)}
                     </p>
+                    {project.imageNote ? (
+                      <p className="mt-3 text-[13px] leading-5 text-[#333]">{project.imageNote}</p>
+                    ) : null}
                     <div className="mt-6 flex flex-wrap gap-2">
                       {getFeaturedStacks(project.slug, project.stacks).map((stack) => (
                         <span
@@ -315,7 +339,7 @@ export default async function Home({
                   >
                     <Image
                       src={project.heroImage}
-                      alt={`${project.title} preview`}
+                      alt={project.heroAlt ?? `${project.title} preview`}
                       width={previewSize.width}
                       height={previewSize.height}
                       priority={index === 0}
@@ -341,7 +365,9 @@ export default async function Home({
                   href={post.href}
                   className="grid gap-2 px-6 py-5 transition hover:bg-black/[0.04] sm:grid-cols-[120px_minmax(0,1fr)]"
                 >
-                  <span className="font-mono text-[12px] tracking-[0.08em] text-[#242424]">{post.date}</span>
+                  <span className="font-mono text-[12px] tracking-[0.08em] text-[#242424]">
+                    {post.date}
+                  </span>
                   <span className="text-[#0a0a0a]">
                     <span className="block text-[18px] font-[540] leading-[1.25] tracking-[-0.26px]">
                       {post.title}
@@ -374,8 +400,16 @@ export default async function Home({
               </div>
             </div>
             <p className="mt-4 text-[15px] font-[330] leading-[1.45] tracking-[-0.14px] text-[#111]">
-              백엔드 API, 관리자 도구, 배치, 결제, 크롤링, 배포까지 제품 흐름을 연결합니다.
+              {profileDescription}
             </p>
+            <a
+              href="https://biyeon.net"
+              target="_blank"
+              rel="noreferrer"
+              className="mt-3 inline-flex text-[14px] font-[480] underline underline-offset-4"
+            >
+              비연 · biyeon.net
+            </a>
           </section>
 
           <section className="rounded-[24px] border border-black/[0.1] bg-white p-4">
@@ -396,9 +430,7 @@ export default async function Home({
                 >
                   <span>{category.name}</span>
                   <span
-                    className={
-                      selectedCategory === category.key ? "text-white" : "text-[#555]"
-                    }
+                    className={selectedCategory === category.key ? "text-white" : "text-[#555]"}
                   >
                     {category.count}
                   </span>
@@ -413,6 +445,7 @@ export default async function Home({
               주요 경험
             </h2>
             <ul className="space-y-2 text-[14px] font-[330] leading-[1.45] tracking-[-0.14px] text-[#0a0a0a]">
+              <li>Flutter 앱·웹 서비스와 Unity 게임 개발</li>
               <li>NestJS/Spring Boot 기반 API와 운영 도구 구현</li>
               <li>배치, 결제, 크롤링, 검색, 캐시 성능 개선</li>
               <li>제품 화면부터 인프라 배포까지 이어지는 문제 해결</li>
@@ -470,14 +503,27 @@ export default async function Home({
                   Career
                 </p>
                 <div className="mt-2 space-y-2">
-                  <p>
-                    <span className="block text-[#0a0a0a]">주식회사 블링스</span>
-                    <span>2025.03 - 현재 · 백엔드 개발자</span>
-                  </p>
-                  <p>
-                    <span className="block text-[#0a0a0a]">헬스캐처 법인</span>
-                    <span>2024.03 - 2025.02 · 개발자</span>
-                  </p>
+                  {careers.map((career) => (
+                    <p key={career.company}>
+                      <span className="block text-[#0a0a0a]">
+                        {career.href ? (
+                          <a
+                            href={career.href}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="hover:underline"
+                          >
+                            {career.company}
+                          </a>
+                        ) : (
+                          career.company
+                        )}
+                      </span>
+                      <span>
+                        {career.period} · {career.role}
+                      </span>
+                    </p>
+                  ))}
                 </div>
               </div>
 
@@ -497,9 +543,7 @@ export default async function Home({
                 <p className="font-mono text-[11px] uppercase tracking-[0.08em] text-[#555]">
                   Certificates
                 </p>
-                <p className="mt-2">
-                  정보처리기사 · SQLD · 리눅스마스터 2급
-                </p>
+                <p className="mt-2">정보처리기사 · SQLD · 리눅스마스터 2급</p>
               </div>
             </div>
           </section>
@@ -537,9 +581,7 @@ export default async function Home({
             ]}
           />
           <div>
-            <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-[#555]">
-              Focus
-            </p>
+            <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-[#555]">Focus</p>
             <ul className="mt-4 space-y-2 text-[15px] font-[330] leading-[1.45] tracking-[-0.14px] text-[#333]">
               <li>Backend API</li>
               <li>Admin Tools</li>
@@ -553,18 +595,10 @@ export default async function Home({
   );
 }
 
-function FooterColumn({
-  title,
-  links,
-}: {
-  title: string;
-  links: [string, string][];
-}) {
+function FooterColumn({ title, links }: { title: string; links: [string, string][] }) {
   return (
     <div>
-      <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-[#555]">
-        {title}
-      </p>
+      <p className="font-mono text-[12px] uppercase tracking-[0.12em] text-[#555]">{title}</p>
       <ul className="mt-4 space-y-2 text-[15px] font-[480] leading-[1.4]">
         {links.map(([label, href]) => {
           const isExternal = href.startsWith("http") || href.startsWith("mailto:");

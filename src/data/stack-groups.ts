@@ -172,23 +172,51 @@ const stackSectionsBySlug: Record<string, StackSection[]> = {
   ],
   manjeom: [
     {
-      label: "프론트엔드",
+      label: "모바일 앱",
+      groups: [
+        { label: "언어", stacks: ["Dart"] },
+        { label: "프레임워크", stacks: ["Flutter"] },
+      ],
+    },
+    {
+      label: "웹",
       groups: [
         { label: "언어", stacks: ["TypeScript"] },
-        { label: "프레임워크/라이브러리", stacks: ["Next.js", "React", "Tailwind CSS"] },
+        { label: "프레임워크", stacks: ["Next.js", "React"] },
       ],
     },
     {
-      label: "변환 로직/데이터",
+      label: "계정·기록·배포",
       groups: [
-        { label: "언어/라이브러리", stacks: ["TypeScript", "hangul-js"] },
-        { label: "데이터", stacks: ["JSON Data"] },
+        { label: "인증·저장소", stacks: ["Firebase Auth", "Firestore"] },
+        { label: "배포", stacks: ["Vercel"] },
+      ],
+    },
+  ],
+  mystery: [
+    { label: "게임", groups: [{ label: "언어·엔진", stacks: ["C#", "Unity", "URP 2D"] }] },
+    {
+      label: "네트워크",
+      groups: [{ label: "다인 연결", stacks: ["Netcode for GameObjects", "Steamworks.NET"] }],
+    },
+    { label: "검증", groups: [{ label: "게임 검사", stacks: ["Unity Test Framework"] }] },
+  ],
+  sumgil: [
+    {
+      label: "모바일 앱",
+      groups: [
+        { label: "언어·프레임워크", stacks: ["Dart", "Flutter"] },
+        { label: "상태·로컬 저장", stacks: ["Riverpod", "Drift"] },
       ],
     },
     {
-      label: "인프라/CI/CD",
-      groups: [{ label: "배포", stacks: ["Vercel"] }],
+      label: "백엔드",
+      groups: [
+        { label: "언어·프레임워크", stacks: ["TypeScript", "Hono"] },
+        { label: "서버 저장소", stacks: ["Firestore", "Cloud Storage"] },
+      ],
     },
+    { label: "지도·배포", groups: [{ label: "서비스", stacks: ["Naver Map", "Vercel"] }] },
   ],
   "weather-app-android": [
     {

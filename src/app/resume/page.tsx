@@ -10,9 +10,11 @@ import {
   UserRound,
 } from "lucide-react";
 
+import { careers, profileDescription } from "@/data/profile";
+
 export const metadata = {
-  title: "Resume | ByuN0-0.log",
-  description: "황비연의 짧은 웹 이력서",
+  title: "Resume",
+  description: "비연 대표이자 앱과 게임을 개발·운영하는 1인 개발자 황비연의 이력서",
 };
 
 const links = [
@@ -25,22 +27,6 @@ const links = [
     icon: UserRound,
   },
   { label: "Blog", value: "blog.biyeon.net", href: "https://blog.biyeon.net", icon: Rss },
-];
-
-const careers = [
-  {
-    company: "주식회사 블링스",
-    period: "2025.03 - 현재",
-    role: "백엔드 개발자",
-    summary:
-      "Piqq, BlynxLab, Rizzz 등 실서비스의 백엔드 API, 관리자 도구, 배치, 결제, 크롤링, 인프라 개선",
-  },
-  {
-    company: "헬스캐처 법인",
-    period: "2024.03 - 2025.02",
-    role: "개발자",
-    summary: "건강 체험단/커뮤니티 서비스의 모바일 앱과 Spring Boot 백엔드 개발",
-  },
 ];
 
 const certificates = [
@@ -91,10 +77,10 @@ export default function ResumePage() {
             황비연
           </h1>
           <p className="mt-3 text-[24px] font-[480] leading-[1.25] tracking-[-0.26px]">
-            백엔드 개발자
+            앱과 게임을 개발·운영하는 1인 개발자
           </p>
           <p className="mt-5 max-w-3xl text-[19px] font-[330] leading-[1.45] tracking-[-0.14px]">
-            백엔드 API, 운영 도구, 배치, 결제, 크롤링, 배포까지 제품 흐름을 연결하는 개발자입니다.
+            {profileDescription}
           </p>
         </section>
 
@@ -107,7 +93,19 @@ export default function ResumePage() {
                     <div className="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between">
                       <div>
                         <h3 className="text-[26px] font-[540] leading-[1.25] tracking-[-0.26px]">
-                          {career.company}
+                          {career.href ? (
+                            <a
+                              href={career.href}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="inline-flex items-center gap-2 hover:underline"
+                            >
+                              {career.company}
+                              <ExternalLink className="size-4" />
+                            </a>
+                          ) : (
+                            career.company
+                          )}
                         </h3>
                         <p className="mt-1 text-[17px] font-[480] leading-[1.35]">
                           {career.role}
@@ -188,7 +186,7 @@ export default function ResumePage() {
                 ByuN0-0
               </h2>
               <p className="mt-3 text-[15px] font-[330] leading-[1.45] tracking-[-0.14px] text-[#333]">
-                Backend Developer
+                Independent Developer
               </p>
             </section>
 
